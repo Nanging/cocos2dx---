@@ -21,14 +21,13 @@ bool StartGame::init()
 		return false;
 	}
 	//获得玩家
-	auto p = Player::getInstance();
+	auto player = Player::getInstance();
 
 
 	size = Director::getInstance()->getVisibleSize();
 	//添加背景图片
 	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_1-hd.plist");
 	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("frame.plist");
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_2-hd.plist");
 	auto BackGround = Sprite::createWithSpriteFrameName("mainmenu_bg.png");
 	BackGround->setScale(size.width / BackGround->getContentSize().width, size.height / BackGround->getContentSize().height);
 	BackGround->setPosition(Vec2(size.width / 2, size.height / 2));
@@ -43,9 +42,14 @@ bool StartGame::init()
 }
 void StartGame::initStart()
 {
+	auto player = Player::getInstance();
+	player-> setStarted(false);
+	removeBotton(StartBottomOne);
+	removeBotton(StartBottomTwo);
+
 	//开始游戏键
-	auto StartBottomOne = Sprite::create("start_botton_normal.png");
-	auto StartBottomTwo = Sprite::create("start_botton_seleted.png");
+	StartBottomOne = Sprite::create("start_botton_normal.png");
+	StartBottomTwo = Sprite::create("start_botton_seleted.png");
 	auto moveby = MoveBy::create(0.5, Vec2(0, -2 * StartBottomOne->getContentSize().height / 3));
 	StartBottomOne->setPosition(Vec2(size.width / 2, size.height - logo->getContentSize().height / 2));
 	this->addChild(StartBottomOne, 0);
@@ -55,8 +59,13 @@ void StartGame::initStart()
 	auto Startlistener = EventListenerTouchOneByOne::create();
 	Startlistener->onTouchBegan = [=](Touch *t, Event *e) {
 		Point p = t->getLocation();
-		Rect r = Rect(370, 190, 220, 100);
-		if (r.containsPoint(p)&&StartBottomOne->getNumberOfRunningActions()==0)
+		//Rect r = Rect(370, 190, 220, 100);
+		//if (r.containsPoint(p)&&StartBottomOne->getNumberOfRunningActions()==0)
+		//{
+		//	StartBottomTwo->setPosition(StartBottomOne->getPosition());
+		//	return true;
+		//}
+		if (StartBottomOne->getBoundingBox().containsPoint(p)&&StartBottomOne->getNumberOfRunningActions()==0)
 		{
 			StartBottomTwo->setPosition(StartBottomOne->getPosition());
 			return true;
@@ -86,10 +95,14 @@ Scene *StartGame::createScene()
 	s->addChild(j);
 	return s;
 }
-void StartGame::start()
+void StartGame::start(float dt)
 {
-	log("---start---");
-
+	auto player = Player::getInstance();
+	if (player->getStarted())
+	{
+		log("---Game-Start---");
+		//closeSaveMenu();
+	}
 }
 void StartGame::setSaveMenuVisible()
 {
@@ -111,7 +124,7 @@ void StartGame::setSaveMenuVisible()
 	for (int i = 1;i<=3;i++)
 	{
 		auto saveslot = SlotMenu::createMenu(i);
-		saveslot->setPosition(Vec2(size.width / 2 - SaveMenu_bg->getContentSize().width / 2 + 200 + (i-1)*270, size.height / 2 - logo->getContentSize().height / 3-500));
+		saveslot->setPosition(Vec2(size.width / 2 - SaveMenu_bg->getContentSize().width / 2 + 220 + (i-1)*280, size.height / 2 - logo->getContentSize().height / 3-500));
 		saveslot->runAction(moveby->clone());
 		this->addChild(saveslot, 6, i);
 	}
@@ -120,6 +133,7 @@ void StartGame::setSaveMenuVisible()
 	close_botton->setPosition(Vec2(size.width / 2, size.height / 2 - SaveMenu_bg->getContentSize().height / 2 - 80 - 500));
 	this->addChild(close_botton, 6, 4);
 	close_botton->runAction(moveby->clone());
+	schedule(schedule_selector(StartGame::start));
 }
 void StartGame::closeSaveMenu()
 {
@@ -130,4 +144,16 @@ void StartGame::closeSaveMenu()
 		s->runAction(removeby->clone());
 	}
 	initStart();
+}
+void StartGame::removeBotton(Sprite * botton)
+{
+	if (botton==nullptr)
+	{
+		return;
+	}
+	this->removeChild(botton);
+	//if (botton->getNumberOfRunningActions()==0)
+	//{
+	//	this->removeChild(botton);
+	//}
 }

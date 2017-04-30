@@ -8,7 +8,7 @@ struct SaveSlot
 	int stage;
 };
 class Player
-	:public Node
+	:public Ref
 {
 private:
 	static Player* _instance;

@@ -1,7 +1,7 @@
 #include "SlotMenu.h"
-
+#include "TransitionGame.h"
 #include "Player.h"
-
+#include "StartGame.h"
 SlotMenu::SlotMenu()
 {
 	log("---SlotMenu---");
@@ -119,8 +119,16 @@ void SlotMenu::cancel_delete(Ref* pSender)
 void SlotMenu::createNewGame()
 {
 	log("---New-Game-%d--", slotnumber);
+	auto player = Player::getInstance();
+	player->setStarted(true);
+	auto s = StartGame::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(3, s));
 }
 void SlotMenu::startGame(int num)
 {
 	log("---Start-SaveSlot-%d---", num);
+	auto player = Player::getInstance();
+	player->setStarted(true);
+	auto s = StartGame::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(3, s));
 }

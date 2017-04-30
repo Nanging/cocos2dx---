@@ -11,10 +11,10 @@ Player::~Player()
 }
 bool  Player::initPlayer()
 {
-	if (!Node::init())
-	{
-		return false;
-	}
+	//if (!Node::init())
+	//{
+	//	return false;
+	//}
 	setStarted(false);
 	currentSave = 0;
 	initSaveSlot(1);
