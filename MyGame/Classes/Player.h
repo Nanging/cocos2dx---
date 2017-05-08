@@ -1,31 +1,72 @@
 #pragma once
 #include "cocos2d.h"
+#include "UtilTool.h"
 using namespace cocos2d;
-static const int TotolScore = 150;
+struct TowerTech
+{
+	int power;
+	int speed;
+	int level;
+	TowerTech()
+	{
+		power = 0;
+		speed = 0;
+		level = 1;
+	}
+};
+struct GameStatus
+{
+	int life;
+	int score;
+	int money;
+	int totalMoney;
+
+	GameStatus()
+	{
+		life = 0;
+		score = 0;
+		money = 0;
+		totalMoney = 0;
+	}
+};
 struct SaveSlot
 {
-	int scores;
+	int score[StageNumber+1];
 	int stage;
+	TowerTech tech[TowerNumber + 1];
+	SaveSlot()
+	{
+		for (int i = 0; i <= StageNumber; i++)
+		{
+			score[i] = 0;
+		}
+		stage = 0;
+	}
 };
 class Player
 	:public Ref
 {
 private:
 	static Player* _instance;
-	SaveSlot data[3];
+	SaveSlot data[StageNumber+1];
 	CC_SYNTHESIZE(bool, Started, Started);	
 public:
 	bool SaveStatus[3];
 	Player();
 	~Player();
+	GameStatus current;
 	int currentSave;
 	static Player * getInstance();
 	bool initPlayer();
 	void startSaveSlot(int num);
 	void initSaveSlot(int num);
-	void setScore(int num, int score = 0);
-	int getScore(int num = 0);
+	void setScore(int num, int stage = 0, int score = 0);
+	int getScore(int num = 0, int stage = 0);
 	void setStage(int num, int stage = 0);
 	int getStage(int num = 0);
+	void resetGame();
+	void start();
+	void upTechLevel(Tower n,Tech t);
+	void resetTech();
 };
 

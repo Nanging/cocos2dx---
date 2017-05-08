@@ -28,7 +28,7 @@ bool StartGame::init()
 	//Ìí¼Ó±³¾°Í¼Æ¬
 	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_1-hd.plist");
 	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("frame.plist");
-	auto BackGround = Sprite::createWithSpriteFrameName("mainmenu_bg.png");
+	auto BackGround = Sprite::create("mainmenu_bg.png");
 	BackGround->setScale(size.width / BackGround->getContentSize().width, size.height / BackGround->getContentSize().height);
 	BackGround->setPosition(Vec2(size.width / 2, size.height / 2));
 	this->addChild(BackGround, -1);
@@ -92,7 +92,8 @@ Scene *StartGame::createScene()
 {
 	auto s = Scene::create();
 	auto j = StartGame::create();
-	s->addChild(j);
+	s->setTag(TAG_SCENE);
+	s->addChild(j,0,TAG_START);
 	return s;
 }
 void StartGame::start(float dt)
@@ -101,6 +102,7 @@ void StartGame::start(float dt)
 	if (player->getStarted())
 	{
 		log("---Game-Start---");
+		unschedule(schedule_selector(StartGame::start));
 		//closeSaveMenu();
 	}
 }
@@ -115,8 +117,8 @@ void StartGame::setSaveMenuVisible()
 		}
 	}
 	//ÉèÖÃ²Ëµ¥±³¾°
-	auto SaveMenu_bg = Sprite::createWithSpriteFrameName("mainmenu_saveslot_bg.png");
-	SaveMenu_bg->setPosition(Vec2(size.width / 2, size.height / 2 - logo->getContentSize().height / 3-500));
+	auto SaveMenu_bg = Sprite::create("mainmenu_saveslot_bg.png");
+	SaveMenu_bg->setPosition(Vec2(size.width / 2, size.height / 2 - 0.95 * logo->getContentSize().height / 3 - 500));
 	auto moveby = MoveBy::create(0.5,Vec2(0, 500));
 	this->addChild(SaveMenu_bg,1,0);
 	SaveMenu_bg->runAction(moveby);
@@ -124,13 +126,13 @@ void StartGame::setSaveMenuVisible()
 	for (int i = 1;i<=3;i++)
 	{
 		auto saveslot = SlotMenu::createMenu(i);
-		saveslot->setPosition(Vec2(size.width / 2 - SaveMenu_bg->getContentSize().width / 2 + 220 + (i-1)*280, size.height / 2 - logo->getContentSize().height / 3-500));
+		saveslot->setPosition(Vec2(size.width / 2 - SaveMenu_bg->getContentSize().width / 2 + 200 + (i-1)*280, size.height / 2 - logo->getContentSize().height / 3-500));
 		saveslot->runAction(moveby->clone());
 		this->addChild(saveslot, 6, i);
 	}
 	auto close_saveslot = MenuItemImage::create("close_saveslot.png", "close_saveslot.png", CC_CALLBACK_0(StartGame::closeSaveMenu, this));
 	auto close_botton = Menu::createWithItem(close_saveslot);
-	close_botton->setPosition(Vec2(size.width / 2, size.height / 2 - SaveMenu_bg->getContentSize().height / 2 - 80 - 500));
+	close_botton->setPosition(Vec2(size.width / 2, size.height / 2 - 1.7*SaveMenu_bg->getContentSize().height / 2  - 500));
 	this->addChild(close_botton, 6, 4);
 	close_botton->runAction(moveby->clone());
 	schedule(schedule_selector(StartGame::start));

@@ -2,6 +2,7 @@
 #include "TransitionGame.h"
 #include "Player.h"
 #include "StartGame.h"
+#include "MainMap.h"
 SlotMenu::SlotMenu()
 {
 	log("---SlotMenu---");
@@ -59,14 +60,14 @@ bool SlotMenu::initWithNum(int num)
 	confirm_menu->setVisible(false);
 
 
-	auto status = player->SaveStatus[num - 1];
+	auto status = player->SaveStatus[num];
 	log("-------%d----%d-------", num,status);
 	if (status)
 	{
 		star->setVisible(true);
 		__String *str1 = __String::createWithFormat("SaveSlot %d", num);
 		label_hint = Label::createWithSystemFont(str1->getCString(), "arial", 30); label_hint->setPosition(Vec2(0, 30));
-		__String *str2 = __String::createWithFormat("%03d/%d", player->getScore(num),TotolScore);
+		__String *str2 = __String::createWithFormat("%02d/%d", player->getScore(num),TotolScore);
 		score_label = Label::createWithSystemFont(str2->getCString(), "arial", 30);
 		score_label->setPosition(Vec2(20, -30));
 		this->addChild(score_label,1);
@@ -120,15 +121,15 @@ void SlotMenu::createNewGame()
 {
 	log("---New-Game-%d--", slotnumber);
 	auto player = Player::getInstance();
-	player->setStarted(true);
-	auto s = StartGame::createScene();
-	Director::getInstance()->replaceScene(TransitionGame::create(3, s));
+	player->startSaveSlot(slotnumber);
+	auto s = MainMap::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(1.5, s));
 }
 void SlotMenu::startGame(int num)
 {
 	log("---Start-SaveSlot-%d---", num);
 	auto player = Player::getInstance();
-	player->setStarted(true);
-	auto s = StartGame::createScene();
-	Director::getInstance()->replaceScene(TransitionGame::create(3, s));
+	player->startSaveSlot(num);
+	auto s = MainMap::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(1.5, s));
 }

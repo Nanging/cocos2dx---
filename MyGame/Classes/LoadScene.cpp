@@ -52,7 +52,6 @@ void LoadScene::loadSouce()
 	//加载音效资源
 	NumberOfLoadedResource++;
 	//加载图片资源
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_2-hd.plist");
+	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_2-hd.plist");
 	NumberOfLoadedResource++;
-
 }
