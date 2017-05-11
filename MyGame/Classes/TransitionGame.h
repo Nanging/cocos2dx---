@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __TRENSITION_SCENE_H__
+#define __TRENSITION_SCENE_H__
 #include "cocos2d.h"
 using namespace cocos2d;
 class TransitionGame
@@ -16,3 +17,4 @@ private:
 	void OnSencondActionFinish();
 };
 
+#endif //!__TRENSITION_SCENE_H__

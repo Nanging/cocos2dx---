@@ -28,10 +28,10 @@ bool StartGame::init()
 	//添加背景图片
 	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_1-hd.plist");
 	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("frame.plist");
-	auto BackGround = Sprite::create("mainmenu_bg.png");
-	BackGround->setScale(size.width / BackGround->getContentSize().width, size.height / BackGround->getContentSize().height);
-	BackGround->setPosition(Vec2(size.width / 2, size.height / 2));
-	this->addChild(BackGround, -1);
+	auto background = Sprite::create("mainmenu_bg.png");
+	background->setScale(size.width / background->getContentSize().width, size.height / background->getContentSize().height);
+	background->setPosition(Vec2(size.width / 2, size.height / 2));
+	this->addChild(background, -1);
 	//添加logo
 	logo = Sprite::create("logo.png");
 	logo->setPosition(Vec2(size.width / 2, size.height - logo->getContentSize().height/2));
@@ -44,17 +44,17 @@ void StartGame::initStart()
 {
 	auto player = Player::getInstance();
 	player-> setStarted(false);
-	removeBotton(StartBottomOne);
-	removeBotton(StartBottomTwo);
+	removeBotton(startBottomOne);
+	removeBotton(startBottomTwo);
 
 	//开始游戏键
-	StartBottomOne = Sprite::create("start_botton_normal.png");
-	StartBottomTwo = Sprite::create("start_botton_seleted.png");
-	auto moveby = MoveBy::create(0.5, Vec2(0, -2 * StartBottomOne->getContentSize().height / 3));
-	StartBottomOne->setPosition(Vec2(size.width / 2, size.height - logo->getContentSize().height / 2));
-	this->addChild(StartBottomOne, 0);
-	this->addChild(StartBottomTwo, 0);
-	StartBottomOne->runAction(moveby);
+	startBottomOne = Sprite::create("start_botton_normal.png");
+	startBottomTwo = Sprite::create("start_botton_seleted.png");
+	auto moveby = MoveBy::create(0.5, Vec2(0, -2 * startBottomOne->getContentSize().height / 3));
+	startBottomOne->setPosition(Vec2(size.width / 2, size.height - logo->getContentSize().height / 2));
+	this->addChild(startBottomOne, 0);
+	this->addChild(startBottomTwo, 0);
+	startBottomOne->runAction(moveby);
 	//开始游戏键的点击效果设置
 	auto Startlistener = EventListenerTouchOneByOne::create();
 	Startlistener->onTouchBegan = [=](Touch *t, Event *e) {
@@ -65,9 +65,9 @@ void StartGame::initStart()
 		//	StartBottomTwo->setPosition(StartBottomOne->getPosition());
 		//	return true;
 		//}
-		if (StartBottomOne->getBoundingBox().containsPoint(p)&&StartBottomOne->getNumberOfRunningActions()==0)
+		if (startBottomOne->getBoundingBox().containsPoint(p)&& startBottomOne->getNumberOfRunningActions()==0)
 		{
-			StartBottomTwo->setPosition(StartBottomOne->getPosition());
+			startBottomTwo->setPosition(startBottomOne->getPosition());
 			return true;
 		}
 		return false;
@@ -75,9 +75,9 @@ void StartGame::initStart()
 	Startlistener->onTouchEnded = [=](Touch *t, Event *e)
 	{
 		
-		auto Re_moveby = MoveBy::create(0.5, Vec2(0, 2 * StartBottomOne->getContentSize().height / 3));
-		StartBottomOne->runAction(Re_moveby->clone());
-		StartBottomTwo->runAction(Re_moveby->clone());
+		auto removeby = MoveBy::create(0.5, Vec2(0, 2 * startBottomOne->getContentSize().height / 3));
+		startBottomOne->runAction(removeby->clone());
+		startBottomTwo->runAction(removeby->clone());
 	//	StartBottomOne->setVisible(false);
 	//	StartBottomTwo->setVisible(false);
 		_eventDispatcher->removeEventListener(Startlistener);
@@ -90,11 +90,11 @@ void StartGame::initStart()
 }
 Scene *StartGame::createScene()
 {
-	auto s = Scene::create();
-	auto j = StartGame::create();
-	s->setTag(TAG_SCENE);
-	s->addChild(j,0,TAG_START);
-	return s;
+	auto scene = Scene::create();
+	auto layer = StartGame::create();
+	scene->setTag(TAG_SCENE);
+	scene->addChild(layer,0,TAG_START);
+	return scene;
 }
 void StartGame::start(float dt)
 {
@@ -110,31 +110,31 @@ void StartGame::setSaveMenuVisible()
 {
 	for (int i = 0; i <= 4; i++)
 	{
-		auto s = this->getChildByTag(i);
-		if (s!=nullptr)
+		auto child = this->getChildByTag(i);
+		if (child !=nullptr)
 		{
 			this->removeChildByTag(i);
 		}
 	}
 	//设置菜单背景
-	auto SaveMenu_bg = Sprite::create("mainmenu_saveslot_bg.png");
-	SaveMenu_bg->setPosition(Vec2(size.width / 2, size.height / 2 - 0.95 * logo->getContentSize().height / 3 - 500));
+	auto saceMenuBg = Sprite::create("mainmenu_saveslot_bg.png");
+	saceMenuBg->setPosition(Vec2(size.width / 2, size.height / 2 - 0.95 * logo->getContentSize().height / 3 - 500));
 	auto moveby = MoveBy::create(0.5,Vec2(0, 500));
-	this->addChild(SaveMenu_bg,1,0);
-	SaveMenu_bg->runAction(moveby);
+	this->addChild(saceMenuBg,1,0);
+	saceMenuBg->runAction(moveby);
 
 	for (int i = 1;i<=3;i++)
 	{
 		auto saveslot = SlotMenu::createMenu(i);
-		saveslot->setPosition(Vec2(size.width / 2 - SaveMenu_bg->getContentSize().width / 2 + 200 + (i-1)*280, size.height / 2 - logo->getContentSize().height / 3-500));
+		saveslot->setPosition(Vec2(size.width * (6.4+4.1*i)/ 15 - saceMenuBg->getContentSize().width / 2 , size.height / 2 - logo->getContentSize().height / 3-500));
 		saveslot->runAction(moveby->clone());
 		this->addChild(saveslot, 6, i);
 	}
-	auto close_saveslot = MenuItemImage::create("close_saveslot.png", "close_saveslot.png", CC_CALLBACK_0(StartGame::closeSaveMenu, this));
-	auto close_botton = Menu::createWithItem(close_saveslot);
-	close_botton->setPosition(Vec2(size.width / 2, size.height / 2 - 1.7*SaveMenu_bg->getContentSize().height / 2  - 500));
-	this->addChild(close_botton, 6, 4);
-	close_botton->runAction(moveby->clone());
+	auto closeSaveslot = MenuItemImage::create("close_saveslot.png", "close_saveslot.png", CC_CALLBACK_0(StartGame::closeSaveMenu, this));
+	auto closeBotton = Menu::createWithItem(closeSaveslot);
+	closeBotton->setPosition(Vec2(size.width / 2, size.height / 2 - 1.7*saceMenuBg->getContentSize().height / 2  - 500));
+	this->addChild(closeBotton, 6, 4);
+	closeBotton->runAction(moveby->clone());
 	schedule(schedule_selector(StartGame::start));
 }
 void StartGame::closeSaveMenu()
@@ -142,8 +142,8 @@ void StartGame::closeSaveMenu()
 	auto removeby = MoveBy::create(0.5, Vec2(0, -500));
 	for (int i = 0;i<=4;i++)
 	{
-		auto s = this->getChildByTag(i);
-		s->runAction(removeby->clone());
+		auto child = this->getChildByTag(i);
+		child->runAction(removeby->clone());
 	}
 	initStart();
 }

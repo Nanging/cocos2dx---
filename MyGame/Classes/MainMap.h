@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MAIN_MAP_SCENE_H__
+#define __MAIN_MAP_SCENE_H__
+
+
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "StageFlag.h"
@@ -7,7 +10,7 @@ using namespace ui;
 class MainMap
 	:public Layer
 {
-	Sprite * touch;
+	//Sprite * touch;
 	ScrollView * sv;
 	StageFlag* flagOne;
 	StageFlag* flagTwo;
@@ -30,4 +33,4 @@ public:
 	void initBotton();
 	void initLabel();
 };
-
+#endif // !__MAIN_MAP_SCENE_H__

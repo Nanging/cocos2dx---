@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __START_GAME_SCENE_H__
+#define __START_GAME_SCENE_H__
 #include "cocos2d.h"
 using namespace cocos2d;
 class StartGame
@@ -6,8 +7,8 @@ class StartGame
 {
 private:
 	Sprite * logo;
-	Sprite * StartBottomOne;
-	Sprite * StartBottomTwo;
+	Sprite * startBottomOne;
+	Sprite * startBottomTwo;
 public:
 	Size size;
 	StartGame();
@@ -22,3 +23,4 @@ public:
 	CREATE_FUNC(StartGame);
 };
 
+#endif //!__START_GAME_SCENE_H__

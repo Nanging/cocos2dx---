@@ -13,11 +13,11 @@ MainMap::~MainMap()
 }
 Scene * MainMap::createScene()
 {
-	auto s = Scene::create();
-	auto j = MainMap::create();
-	s->setTag(TAG_SCENE);
-	s->addChild(j,0,TAG_MAP);
-	return s;
+	auto scene = Scene::create();
+	auto layer = MainMap::create();
+	scene->setTag(TAG_SCENE);
+	scene->addChild(layer,0,TAG_MAP);
+	return scene;
 }
 bool MainMap::init()
 {
@@ -91,7 +91,7 @@ void MainMap::initMap()
 	//sv->addEventListener(CC_CALLBACK_2(MainMap::MapScroll, this));
 	sv->setAnchorPoint(Vec2(0.5, 0.5));
 	sv->setScrollBarEnabled(false);
-	sv->setInnerContainerSize(size*1.2f);
+	sv->setInnerContainerSize(size*scale);
 	sv->setContentSize(size);
 	sv->setPosition(Vec2(size.width / 2, size.height / 2));
 	sv->setInnerContainerPosition(Vec2(0, 0));
@@ -100,20 +100,23 @@ void MainMap::initMap()
 
 	auto mainMap = ImageView::create("mainmap.png");
 	sv->addChild(mainMap, -1);
-	mainMap->setPosition(Vec2(1.2*size.width / 2, 1.2*size.height / 2));
-	mainMap->setScale(1.2*size.width / mainMap->getContentSize().width, 1.2*size.height / mainMap->getContentSize().height);
+	mainMap->setPosition(Vec2(scale*size.width / 2, scale*size.height / 2));
+	mainMap->setScale(scale*size.width / mainMap->getContentSize().width, scale*size.height / mainMap->getContentSize().height);
 
 	flagOne = StageFlag::create(1);
+	flagOne->setScale(0.7f);
 	sv->addChild(flagOne,3,TAG_FLAG_ONE);
 	flagOne->setPosition(Vec2(1.2*size.width / 6, 1.2*size.height / 2));
 	flagOne->setVisible(false);
 
 	flagTwo = StageFlag::create(2);
+	flagTwo->setScale(0.7f);
 	sv->addChild(flagTwo,3,TAG_FLAG_TWO);
 	flagTwo->setPosition(Vec2(1.6*size.width / 4, 1.8*size.height / 2));
 	flagTwo->setVisible(false);
 
 	flagThree = StageFlag::create(3);
+	flagThree->setScale(0.7f);
 	sv->addChild(flagThree,3,TAG_FLAG_THREE);
 	flagThree->setPosition(Vec2(1.2*size.width / 2, 1.3*size.height / 2));
 	flagThree->setVisible(false);
@@ -145,8 +148,8 @@ void MainMap::initFlag()
 void MainMap::ToMainMenu(Ref * psender)
 {
 	log("---Back-To-MainMenu---");
-	auto s = StartGame::createScene();
-	Director::getInstance()->replaceScene(TransitionGame::create(1.5, s));
+	auto scene = StartGame::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(1.5, scene));
 }
 void MainMap::techScene(Ref * psender)
 {

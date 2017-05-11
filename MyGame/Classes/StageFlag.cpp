@@ -43,14 +43,14 @@ bool StageFlag::init(int num)
 	for (int i = 0; i < MaxScore; i++)
 	{
 		auto star = Sprite::create("missed_star.png");
-		star_size = star->getContentSize();
+		starSize = star->getContentSize();
 		this->addChild(star, 3, i + 1);
 		int k = i - 2;
 		if (i < 2)
 		{
 			k = 2 - i;
 		}
-		star->setPosition(Vec2( (i - 2)*star_size.width, 0.8 * s.height - 0.5 * k * star_size.height));
+		star->setPosition(Vec2( (i - 2)*starSize.width, 0.8 * s.height - 0.5 * k * starSize.height));
 		stars.pushBack(star);
 	}
 	initStars();
@@ -65,32 +65,32 @@ void StageFlag::initStars()
 	log("---Flag---%d---cur--%d--", score,current);
 	if (score == MaxScore)
 	{
-		auto ac_nor = Sprite::create("pass_flag_normal.png");
-		auto ac_sel = Sprite::create("pass_flag_selected.png");
-		flag->setNormalImage(ac_nor);
-		flag->setSelectedImage(ac_sel);
+		auto acNor = Sprite::create("pass_flag_normal.png");
+		auto acSel = Sprite::create("pass_flag_selected.png");
+		flag->setNormalImage(acNor);
+		flag->setSelectedImage(acSel);
 	}
 	else if (score >= 0 && stage != current+1)
 	{
-		auto ac_nor = Sprite::create("fail_flag_normal.png");
-		auto ac_sel = Sprite::create("fail_flag_seleted.png");
-		flag->setNormalImage(ac_nor);
-		flag->setSelectedImage(ac_sel);
+		auto acNor = Sprite::create("fail_flag_normal.png");
+		auto acSel = Sprite::create("fail_flag_seleted.png");
+		flag->setNormalImage(acNor);
+		flag->setSelectedImage(acSel);
 	}
 	Size s = flag->getContentSize();
 	for (int i = 0; i < score; i++)
 	{
-		auto star_gain = Sprite::create("gained_star.png");
-		star_gain->setScale(1.2f);
+		auto starGain = Sprite::create("gained_star.png");
+		starGain->setScale(1.2f);
 		this->removeChildByTag(i + 1);
-		stars.replace(i, star_gain);
-		this->addChild(star_gain, 3, i + 1);
+		stars.replace(i, starGain);
+		this->addChild(starGain, 3, i + 1);
 		int k = i - 2;
 		if (i < 2)
 		{
 			k = 2 - i;
 		}
-		star_gain->setPosition(Vec2((i - 2)*star_size.width, 0.8 * s.height - 0.5 * k * star_size.height));
+		starGain->setPosition(Vec2((i - 2)*starSize.width, 0.8 * s.height - 0.5 * k * starSize.height));
 	}
 }
 void StageFlag::startStage(Ref* psender)
@@ -98,6 +98,6 @@ void StageFlag::startStage(Ref* psender)
 	log("---stage-%d---",stage);
 	//auto flag = dynamic_cast<Node*>(psender);
 	//flag->setVisible(false);
-	auto s = Game::createScene(stage);
-	Director::getInstance()->replaceScene(TransitionGame::create(1.5, s));
+	auto scene = Game::createScene(stage);
+	Director::getInstance()->replaceScene(TransitionGame::create(1.5, scene));
 }

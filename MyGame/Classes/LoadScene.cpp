@@ -14,10 +14,10 @@ LoadScene::~LoadScene()
 }
 Scene * LoadScene::createScene()
 {
-	auto s = Scene::create();
-	auto j = LoadScene::create();
-	s->addChild(j);
-	return s;
+	auto scene = Scene::create();
+	auto layer = LoadScene::create();
+	scene->addChild(layer);
+	return scene;
 }
 bool LoadScene::init()
 {

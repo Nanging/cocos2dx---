@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GAME_SCENE_H__
+#define __GAME_SCENE_H__
+#endif // !__GAME_SCENE_H__
+
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 using namespace cocos2d;
@@ -7,9 +10,9 @@ class Game
 	:public Layer
 {
 private:
-	Vector<MenuItemImage *> TowerPlace;
+	Vector<MenuItemImage *> towerPlace;
 	
-	Vector<Sprite*> Bullet;
+	Vector<Sprite*> bullets;
 	//ScrollView * sv;
 	int stage;
 

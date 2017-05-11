@@ -1,12 +1,11 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
 #include "LoadScene.h"
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(960, 640);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(960, 640);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(960, 640);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(960, 640);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1200, 768);
+static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
+static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
@@ -39,15 +38,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("MyGame", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("KingdomRush", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+		glview->setFrameSize(1200, 768);
 #else
-        glview = GLViewImpl::create("MyGame");
+        glview = GLViewImpl::create("KingdomRush");
 #endif
         director->setOpenGLView(glview);
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);

@@ -14,13 +14,13 @@ TransitionGame::~TransitionGame()
 }
 TransitionGame * TransitionGame::create(float t, Scene *scene)
 {
-	auto _Scene = new TransitionGame();
-	if (_Scene && _Scene->initWithDuration(t, scene))
+	auto _scene = new TransitionGame();
+	if (_scene && _scene->initWithDuration(t, scene))
 	{
-		_Scene->autorelease();
-		return _Scene;
+		_scene->autorelease();
+		return _scene;
 	}
-	CC_SAFE_DELETE(_Scene);
+	CC_SAFE_DELETE(_scene);
 	return NULL;
 }
 void TransitionGame::onEnter()
@@ -29,21 +29,21 @@ void TransitionGame::onEnter()
 	TransitionScene::onEnter();
 	Size size = Director::getInstance()->getVisibleSize();
 	//×ó±ßµÄ±³¾°
-	auto leftdoor = Sprite::create("transition_left.png");
-	leftdoor->setScale((size.width / 2) / leftdoor->getContentSize().width, size.height / leftdoor->getContentSize().height);
-	leftdoor->setAnchorPoint(Vec2(1, 0.5));
-	this->addChild(leftdoor,1);
-	leftdoor->setPosition(Vec2(0, size.height / 2));
+	auto leftDoor = Sprite::create("transition_left.png");
+	leftDoor->setScale((size.width / 2) / leftDoor->getContentSize().width, size.height / leftDoor->getContentSize().height);
+	leftDoor->setAnchorPoint(Vec2(1, 0.5));
+	this->addChild(leftDoor,1);
+	leftDoor->setPosition(Vec2(0, size.height / 2));
 	//×ó±ßlogo
-	auto leftlogo = Sprite::create("logo_left.png");
-	leftlogo->setAnchorPoint(Vec2(1, 0.5));
-	this->addChild(leftlogo, 3);
-	leftlogo->setPosition(Vec2(0, size.height / 2 + leftlogo->getContentSize().height / 4));
+	auto leftLogo = Sprite::create("logo_left.png");
+	leftLogo->setAnchorPoint(Vec2(1, 0.5));
+	this->addChild(leftLogo, 3);
+	leftLogo->setPosition(Vec2(0, size.height / 2 + leftLogo->getContentSize().height / 4));
 	//×ó±ßµÄ¼ÓÔØÍ¼Æ¬
-	auto leftload = Sprite::create("load_left.png");
-	leftload->setAnchorPoint(Vec2(1, 0.5));
-	this->addChild(leftload, 5);
-	leftload->setPosition(Vec2(0, size.height / 2 - leftlogo->getContentSize().height / 2));
+	auto leftLoad = Sprite::create("load_left.png");
+	leftLoad->setAnchorPoint(Vec2(1, 0.5));
+	this->addChild(leftLoad, 5);
+	leftLoad->setPosition(Vec2(0, size.height / 2 - leftLogo->getContentSize().height / 2));
 
 
 	//×ó±ßÖ´ÐÐ¶¯×÷
@@ -52,32 +52,32 @@ void TransitionGame::onEnter()
 	auto change = CallFuncN::create(CC_CALLBACK_0(TransitionGame::OnSencondActionFinish, this));
 	auto over = CallFuncN::create(CC_CALLBACK_0(TransitionGame::LRFinish, this));
 	auto leftAction = Sequence::create(moveby, change, delay, moveby->reverse(), over, NULL);
-	leftlogo->runAction(leftAction->clone());
-	leftload->runAction(leftAction->clone());
-	leftdoor->runAction(leftAction);
+	leftLogo->runAction(leftAction->clone());
+	leftLoad->runAction(leftAction->clone());
+	leftDoor->runAction(leftAction);
 	
 
 	
-	auto rightdoor = Sprite::create("transition_right.png");
-	rightdoor->setScale((size.width / 2) / rightdoor->getContentSize().width, size.height / rightdoor->getContentSize().height);
-	rightdoor->setAnchorPoint(Vec2(0, 0.5));
-	this->addChild(rightdoor, 1);
-	rightdoor->setPosition(Vec2(size.width, size.height / 2));
+	auto rightDoor = Sprite::create("transition_right.png");
+	rightDoor->setScale((size.width / 2) / rightDoor->getContentSize().width, size.height / rightDoor->getContentSize().height);
+	rightDoor->setAnchorPoint(Vec2(0, 0.5));
+	this->addChild(rightDoor, 1);
+	rightDoor->setPosition(Vec2(size.width, size.height / 2));
 
-	auto rightlogo = Sprite::create("logo_right.png");
-	rightlogo->setAnchorPoint(Vec2(0, 0.5));
-	this->addChild(rightlogo, 3);
-	rightlogo->setPosition(Vec2(size.width, size.height / 2 + rightlogo->getContentSize().height / 4));
+	auto rightLogo = Sprite::create("logo_right.png");
+	rightLogo->setAnchorPoint(Vec2(0, 0.5));
+	this->addChild(rightLogo, 3);
+	rightLogo->setPosition(Vec2(size.width, size.height / 2 + rightLogo->getContentSize().height / 4));
 
-	auto rightload = Sprite::create("load_right.png");
-	rightload->setAnchorPoint(Vec2(0, 0.5));
-	this->addChild(rightload, 5);
-	rightload->setPosition(Vec2(size.width, size.height / 2 - rightlogo->getContentSize().height / 2+2));
+	auto rightLoad = Sprite::create("load_right.png");
+	rightLoad->setAnchorPoint(Vec2(0, 0.5));
+	this->addChild(rightLoad, 5);
+	rightLoad->setPosition(Vec2(size.width, size.height / 2 - rightLogo->getContentSize().height / 2+2));
 
 	auto rightAction = Sequence::create(moveby->clone()->reverse(), delay->clone(), moveby->clone(), NULL);
-	rightlogo->runAction(rightAction->clone());
-	rightload->runAction(rightAction->clone());
-	rightdoor->runAction(rightAction);
+	rightLogo->runAction(rightAction->clone());
+	rightLoad->runAction(rightAction->clone());
+	rightDoor->runAction(rightAction);
 
 }
 void TransitionGame::LRFinish()

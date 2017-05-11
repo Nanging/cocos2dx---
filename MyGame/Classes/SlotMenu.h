@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __SLOT_MENU_H__
+#define __SLOT_MENU_H__
+
+
 #include "cocos2d.h"
 using namespace cocos2d;
 class SlotMenu
@@ -14,14 +17,16 @@ public:
 	void cancel_delete(Ref* pSender);
 	void createNewGame();
 	void startGame(int num);
+	void initMenu();
 	static SlotMenu* createMenu(int num);
 protected:
-	int slotnumber;
-	Label* label_hint;
-	Label* score_label;
-	MenuItemImage* button_Savelot_Delete;
+	int slotNumber;
+	Label* labelHint;
+	Label* scoreLabel;
+	MenuItemImage* buttonSavelotDelete;
 	MenuItemImage* savelot;
 	Sprite* star;
-	Menu* confirm_menu;
+	Menu* confirmMenu;
 };
 
+#endif // !__SLOT_MENU_H__
