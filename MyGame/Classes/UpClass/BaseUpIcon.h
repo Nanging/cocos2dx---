@@ -1,6 +1,7 @@
-#ifndef __BaseUpIcon_H__
-#define __BaseUpIcon_H__
+#ifndef __BASE_UP_ICON_H__
+#define __BASE_UP_ICON_H__
 #include "cocos2d.h"
+#include "Player.h"
 USING_NS_CC;
 
 class BaseUpIcon :
@@ -16,6 +17,8 @@ public:
 	virtual void upSpeed(){}
 	virtual void setDes(int i){}
 	virtual void reset(){}
+	void getLevel(Tower n);
+	void setLevel(Tower n);
 
 	Label* des;           //文字描述
 	MenuItemImage* forceIcon;    //升级图标
@@ -26,10 +29,10 @@ public:
 	Sprite* bubble;
 
 	int forceLevel;    //相应天赋等级
-	int scopeLevel;
 	int speedLevel;
-	int price;
+	int MaxLevel;
+
 
 };
-#endif
+#endif //!__BASE_UP_ICON_H__
 

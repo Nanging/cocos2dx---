@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "StartGame.h"
 #include "TransitionGame.h"
-
+#include "UpLayer.h"
 MainMap::MainMap()
 {
 	log("---Map-In---");
@@ -147,6 +147,8 @@ void MainMap::initFlag()
 }
 void MainMap::ToMainMenu(Ref * psender)
 {
+	//auto player = Player::getInstance();
+	//player->updateXML();
 	log("---Back-To-MainMenu---");
 	auto scene = StartGame::createScene();
 	Director::getInstance()->replaceScene(TransitionGame::create(1.5, scene));
@@ -154,6 +156,8 @@ void MainMap::ToMainMenu(Ref * psender)
 void MainMap::techScene(Ref * psender)
 {
 	log("---Go-Tech---");
+	auto scene = UpLayer::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(1.5, scene));
 	//auto l = dynamic_cast<MainMap *>(UtilTool::getLayerByTag(TAG_MAP));
 	//l->pause();
 	//l->sv->setTouchEnabled(false);

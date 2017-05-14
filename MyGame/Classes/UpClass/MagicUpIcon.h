@@ -1,5 +1,5 @@
-#ifndef __MagicUpIcon_H__
-#define __MagicUpIcon_H__
+#ifndef __MAGIC_UP_ICON_H__
+#define __MAGIC_UP_ICON_H__
 #include "cocos2d.h"
 #include "BaseUpIcon.h"
 USING_NS_CC;
@@ -17,8 +17,8 @@ public:
 	void upSpeed();
 	void setDes(int i);             //…Ë÷√Œƒ◊÷√Ë ˆ
 	void reset();
-	void mouseTip(Event* event);
+	void mouseTip(EventMouse* e);
 
 };
-#endif
+#endif //!__MAGIC_UP_ICON_H__
 

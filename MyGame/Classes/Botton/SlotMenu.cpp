@@ -46,7 +46,8 @@ bool SlotMenu::initWithNum(int num)
 	{
 		star->setVisible(true);
 		__String *str1 = __String::createWithFormat("SaveSlot %d", num);
-		labelHint = Label::createWithSystemFont(str1->getCString(), "arial", 30); labelHint->setPosition(Vec2(0, 30));
+		labelHint = Label::createWithSystemFont(str1->getCString(), "arial", 30); 
+		labelHint->setPosition(Vec2(0, 30));
 		__String *str2 = __String::createWithFormat("%02d/%d", player->getScore(num),TotolScore);
 		scoreLabel = Label::createWithSystemFont(str2->getCString(), "arial", 30);
 		scoreLabel->setPosition(Vec2(20, -30));
@@ -86,7 +87,7 @@ void SlotMenu::confirm_delete(Ref* pSender)
 {
 	log("---Confirm-Delete-Save-%d---", slotNumber);
 	auto player = Player::getInstance();
-	player->initSaveSlot(slotNumber);
+	player->resetSaveSlot(slotNumber);
 	confirmMenu->setVisible(false);
 	initWithNum(slotNumber);
 }

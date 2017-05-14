@@ -1,26 +1,26 @@
 #include "Player.h"
-#include <string>
+
 
 //-----------------------------------------------------------------------------------
 
 #define isFileExist "isUserDefaultXmpExist" //key - bool
 
 #define  is_save_one "StatusOfSaveSlotOne" //key - bool
-#define  star_save_one "TotalStarOfSaveSlotOne" //key - integer
+#define  star_save_one "TotalStarOfSaveSlotOne" //key - str
 #define  stage_save_one "CurrentStageOfSaveSlotOne" //key - integer
 #define  first_tech_one "theFirstKindOfTowerTechOfSaveSlotOne" //key - str
 #define  second_tech_one "theSecondKindOfTowerTechOfSaveSlotOne" //key - str
 #define  third_tech_one "theThirdKindOfTowerTechOfSaveSlotOne" //key - str
 
 #define  is_save_two "StatusOfSaveSlotTwo" //key - bool
-#define  star_save_two "TotalStarOfSaveSlotTwo" //key - integer
+#define  star_save_two "TotalStarOfSaveSlotTwo" //key - str
 #define  stage_save_two "CurrentStageOfSaveSlotTwo" //key - integer
 #define  first_tech_two "theFirstKindOfTowerTechOfSaveSlotTwo" //key - str
 #define  second_tech_two "theSecondKindOfTowerTechOfSaveSlotTwo" //key - str
 #define  third_tech_two "theThirdKindOfTowerTechOfSaveSlotTwo" //key - str
 
 #define  is_save_three "StatusOfSaveSlotThree" //key - bool
-#define  star_save_three "TotalStarOfSaveSlotThree" //key - integer
+#define  star_save_three "TotalStarOfSaveSlotThree" //key - str
 #define  stage_save_three "CurrentStageOfSaveSlotThree" //key - integer
 #define  first_tech_three "theFirstKindOfTowerTechOfSaveSlotThree" //key - str
 #define  second_tech_three "theSecondKindOfTowerTechOfSaveSlotThree" //key - str
@@ -40,13 +40,14 @@ Player::~Player()
 bool  Player::initPlayer()
 {
 	resetGame();
-	setScore(1, 1, 4);
-	setScore(3, 1, 5);
-	setScore(3, 2, 3);
-	setStage(1, 1);
-	setStage(3, 2);
-	saveStatus[1] = true;
-	saveStatus[3] = true;
+	//setScore(1, 1, 4);
+	//setScore(3, 1, 5);
+	//setScore(3, 2, 3);
+	//setStage(1, 1);
+	//setStage(3, 2);
+	//saveStatus[1] = true;
+	//saveStatus[3] = true;
+	updateXML();
 	return true;
 }
 Player *Player::getInstance()
@@ -78,7 +79,7 @@ void Player::startSaveSlot(int num)
 	}
 	currentSave = num;
 }
-void Player::initSaveSlot(int num)
+void Player::resetSaveSlot(int num)
 {
 	saveStatus[num] = false;
 	log("-%d-false---",num);
@@ -190,32 +191,75 @@ int Player::getStage(int num /* = 0 */)
 }
 void Player::resetGame()
 {
-	auto isExist = UserDefault::getInstance()->isXMLFileExist();
-	if (isExist)
+	
+	if (!UserDefault::getInstance()->getBoolForKey(isFileExist))
 	{
-		auto s = UserDefault::getXMLFilePath();
-		log("%s",s.c_str());
-		//UserDefault::getInstance()->UserDefault::setDoubleForKey("sss", 1.1);
+		auto ub = UserDefault::getInstance();
+		ub->setBoolForKey(isFileExist, true);
+
+		ub->setBoolForKey(is_save_one, false);
+		ub->setStringForKey(star_save_one, "000");
+		ub->setIntegerForKey(stage_save_one, 0);
+		ub->setStringForKey(first_tech_one, "001");
+		ub->setStringForKey(second_tech_one, "001");
+		ub->setStringForKey(third_tech_one, "001");
+
+		ub->setBoolForKey(is_save_two, false);
+		ub->setStringForKey(star_save_two, "000");
+		ub->setIntegerForKey(stage_save_two, 0);
+		ub->setStringForKey(first_tech_two, "001");
+		ub->setStringForKey(second_tech_two, "001");
+		ub->setStringForKey(third_tech_two, "001");
+
+		ub->setBoolForKey(is_save_three, false);
+		ub->setStringForKey(star_save_three, "000");
+		ub->setIntegerForKey(stage_save_three, 0);
+		ub->setStringForKey(first_tech_three, "001");
+		ub->setStringForKey(second_tech_three, "001");
+		ub->setStringForKey(third_tech_three, "001");
+
+		resetSaveSlot(1);
+		resetSaveSlot(2);
+		resetSaveSlot(3);
 	}
 	else
 	{
-		log("no");
+		log("Exist");
 	}
+	initSaveSlot();
 	setStarted(false);
 	currentSave = 0;
-	initSaveSlot(1);
-	initSaveSlot(2);
-	initSaveSlot(3);
-	for (int i = 1; i <=StageNumber; i++)
-	{
-		saveStatus[i] = false;
-		setScore(i);
-		setStage(i);
-	}
 	current.life = InitialLifes;
 	current.money = InitialMoney;
 	current.score = 0;
 	current.totalMoney = InitialMoney;
+}
+void Player::initSaveSlot()
+{
+	auto ub = UserDefault::getInstance();
+
+	saveStatus[1] = ub->getBoolForKey(is_save_one);
+	data[1].initScore(ub->getStringForKey(star_save_one));
+	data[1].stage = ub->getIntegerForKey(stage_save_one);
+	data[1].tech[1].init(ub->getStringForKey(first_tech_one));
+	data[1].tech[2].init(ub->getStringForKey(second_tech_one));
+	data[1].tech[3].init(ub->getStringForKey(third_tech_one));
+
+	saveStatus[2] = ub->getBoolForKey(is_save_two);
+	data[2].initScore(ub->getStringForKey(star_save_two));
+	data[2].stage = ub->getIntegerForKey(stage_save_two);
+	data[2].tech[1].init(ub->getStringForKey(first_tech_two));
+	data[2].tech[2].init(ub->getStringForKey(second_tech_two));
+	data[2].tech[3].init(ub->getStringForKey(third_tech_two));
+
+	saveStatus[3] = ub->getBoolForKey(is_save_three);
+	data[3].initScore(ub->getStringForKey(star_save_three));
+	data[3].stage = ub->getIntegerForKey(stage_save_three);
+	data[3].tech[1].init(ub->getStringForKey(first_tech_three));
+	data[3].tech[2].init(ub->getStringForKey(second_tech_three));
+	data[3].tech[3].init(ub->getStringForKey(third_tech_three));
+
+	log("%d--%d--%d",getScore(1),getScore(2),getScore(3));
 }
 void Player::start()
 {
@@ -228,8 +272,8 @@ void Player::upTechLevel(Tower n,Tech t)
 {
 	switch (t)
 	{
-	case UpPower:
-		data[currentSave].tech[n].power++;
+	case UpForce:
+		data[currentSave].tech[n].force++;
 		break;
 	case UpSpeed:
 		data[currentSave].tech[n].speed++;
@@ -246,11 +290,54 @@ void Player::resetTech()
 	for (int i = 0; i < TowerNumber; i++)
 	{
 		data[currentSave].tech[i].level = 1;
-		data[currentSave].tech[i].power = 0;
+		data[currentSave].tech[i].force = 0;
 		data[currentSave].tech[i].speed = 0;
 	}
 }
+int Player::getTechLevel(Tower n, Tech t)
+{
+	switch (t)
+	{
+	case UpForce:
+		return data[currentSave].tech[n].force;
+		break;
+	case UpSpeed:
+		return data[currentSave].tech[n].speed;
+		break;
+	case UpMaxLevel:
+		return data[currentSave].tech[n].level;
+		break;
+	default:
+		return -1;
+		break;
+	}
+}
+void Player::setTechLevel(Tower n, std::string str)
+{
+	data[currentSave].tech[n].init(str);
+}
 void Player::updateXML()
 {
-	log("-----");
+	auto ub = UserDefault::getInstance();
+	ub->setBoolForKey(is_save_one, saveStatus[1]);
+	ub->setStringForKey(star_save_one,data[1].updateScore());
+	ub->setIntegerForKey(stage_save_one,data[1].stage);
+	ub->setStringForKey(first_tech_one,data[1].tech[1].update());
+	ub->setStringForKey(second_tech_one,data[1].tech[2].update());
+	ub->setStringForKey(third_tech_one,data[1].tech[3].update());
+
+	ub->setBoolForKey(is_save_two, saveStatus[2]);
+	ub->setStringForKey(star_save_two,data[2].updateScore());
+	ub->setIntegerForKey(stage_save_two,data[2].stage);
+	ub->setStringForKey(first_tech_two,data[2].tech[1].update());
+	ub->setStringForKey(second_tech_two,data[2].tech[2].update());
+	ub->setStringForKey(third_tech_two,data[2].tech[3].update());
+
+	ub->setBoolForKey(is_save_three,saveStatus[3]);
+	ub->setStringForKey(star_save_three,data[3].updateScore());
+	ub->setIntegerForKey(stage_save_three,data[3].stage);
+	ub->setStringForKey(first_tech_three,data[3].tech[1].update());
+	ub->setStringForKey(second_tech_three,data[3].tech[2].update());
+	ub->setStringForKey(third_tech_three,data[3].tech[3].update());
+	log("---Update-To-Local---");
 }

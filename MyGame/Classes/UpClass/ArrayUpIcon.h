@@ -1,5 +1,5 @@
-#ifndef __ArrayUpIcon_H__
-#define __ArrayUpIcon_H__
+#ifndef __ARRAY_UP_ICON_H__
+#define __ARRAY_UP_ICON_H__
 #include "cocos2d.h"
 #include "BaseUpIcon.h"
 USING_NS_CC;
@@ -17,7 +17,7 @@ public:
 	void upSpeed();
 	void setDes(int i);
 	void reset();
-	void mouseTip(Event* event);
+	void mouseTip(EventMouse* e);
 
 };
-#endif
+#endif //!__ARRAY_UP_ICON_H__

@@ -78,10 +78,8 @@ Game * Game::createWithNum(int num)
 void Game::initUnbuild()
 {
 	Size size = UtilTool::getSize();
-	//if (stage == 1)
-	//{
 	auto unbuildPlaces = Menu::create();
-	auto unbuildPlace = MenuItemImage::create("land_unbuild.png", "land_unbuild.png", CC_CALLBACK_0(Game::pauseGame, this));
+	auto unbuildPlace = MenuItemImage::create("land_unbuild.png", "land_unbuild.png", CC_CALLBACK_1(Game::pauseGame, this));
 	unbuildPlace->setPosition(Vec2(1.1 * size.width / 2, 1.2 * size.height / 2));
 
 	unbuildPlaces->addChild(unbuildPlace,99);
@@ -93,9 +91,10 @@ void Game::initBackGround()
 {
 
 }
-void Game::pauseGame()
+void Game::pauseGame(Ref * psender)
 {
 	auto stage = dynamic_cast<StageOne*>(UtilTool::getLayerByTag(TAG_STAGE));
+	
 	count++;
 	if (count % 2)
 	{
@@ -106,7 +105,7 @@ void Game::pauseGame()
 		UtilTool::resumeLayerByTag(TAG_STAGE);
 	}
 }
-void Game::resumeGame()
+void Game::resumeGame(Ref * psender)
 {
 	this->resume();
 }
