@@ -5,8 +5,8 @@
 BaseUpIcon::BaseUpIcon()
 {
 	forceLevel = 0;
-	scopeLevel = 0;
 	speedLevel = 0;
+	MaxLevel = 0;
 	des = Label::createWithTTF("", "fonts/Marker Felt.ttf", 20);
 	des->setString("OK");
 	briefDes = Label::createWithTTF("", "fonts/Marker Felt.ttf", 20);
@@ -22,9 +22,9 @@ BaseUpIcon::BaseUpIcon()
 	forceIcon->setScale(0.8f);
 	scopeIcon->setScale(0.8f);
 	speedIcon->setScale(0.8f);
-	forceIcon->setPosition(0, 80);
-	scopeIcon->setPosition(-80, 80);
-	speedIcon->setPosition(80, 80);
+	forceIcon->setPosition(0, 100);
+	scopeIcon->setPosition(-100, 100);
+	speedIcon->setPosition(100, 100);
 	auto menu = Menu::create(forceIcon, scopeIcon, speedIcon, NULL);
 	menu->setPosition(Vec2::ZERO);
 	addChild(menu, 1);
@@ -44,4 +44,20 @@ bool BaseUpIcon::init() {
 	return true;
 }
 
-
+void BaseUpIcon::setLevel(Tower n) 
+{
+	auto player = Player::getInstance();
+	std::string str;
+	str.resize(3);
+	str.at(0) = forceLevel + '0';
+	str.at(1) = speedLevel + '0';
+	str.at(2) = MaxLevel + '0';
+	player->setTechLevel(n, str);
+}
+void BaseUpIcon::getLevel(Tower n)
+{
+	auto player = Player::getInstance();
+	forceLevel = player->getTechLevel(n, UpForce);
+	speedLevel = player->getTechLevel(n, UpSpeed);
+	MaxLevel = player->getTechLevel(n, UpMaxLevel);
+}

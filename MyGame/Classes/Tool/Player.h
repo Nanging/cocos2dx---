@@ -4,17 +4,37 @@
 
 #include "cocos2d.h"
 #include "UtilTool.h"
+#include <string>
 using namespace cocos2d;
 struct TowerTech
 {
-	int power;
+	int force;
 	int speed;
 	int level;
 	TowerTech()
 	{
-		power = 0;
+		force = 0;
 		speed = 0;
 		level = 1;
+	}
+	void init(std::string str)
+	{
+		if (str.size()==3)
+		{
+			this->force = str.at(0) - '0';
+			this->speed = str.at(1) - '0';
+			this->level = str.at(2) - '0';
+		}
+
+	}
+	std::string update()
+	{
+		std::string str;
+		str.resize(3);
+		str.at(0) = this->force + '0';
+		str.at(1) = this->speed + '0';
+		str.at(2) = this->level + '0';
+		return str;
 	}
 };
 struct GameStatus
@@ -45,6 +65,28 @@ struct SaveSlot
 		}
 		stage = 0;
 	}
+	void initScore(std::string str)
+	{
+		if (str.size()==3)
+		{
+			for (int i = 1; i <= StageNumber; i++)
+			{
+				this->score[i] = str.at(i - 1) - '0';
+			}
+			log("%d--%d--%d", str.at(0), str.at(1), str.at(2));
+		}
+
+	}
+	std::string updateScore()
+	{
+		std::string str;
+		str.resize(StageNumber);
+		for (int i = 1; i <= StageNumber; i++)
+		{
+			str.at(i - 1) = this->score[i] + '0';
+		}
+		return str;
+	}
 };
 class Player
 	:public Ref
@@ -62,15 +104,18 @@ public:
 	static Player * getInstance();
 	bool initPlayer();
 	void startSaveSlot(int num);//start saveslot num
-	void initSaveSlot(int num);//reset saveslot num
+	void resetSaveSlot(int num);//reset saveslot num
+	void initSaveSlot();
 	void setScore(int num, int stage = 0, int score = 0);
 	int getScore(int num = 0, int stage = 0);
 	void setStage(int num, int stage = 0);
 	int getStage(int num = 0);
 	void resetGame();//reset all saveslot
 	void start();//start game
-	void upTechLevel(Tower n,Tech t);//update tech data of this saveslot
+	void upTechLevel(Tower n, Tech t);//update tech data of this saveslot
 	void resetTech();//reset tech data of this saveslot
+	int getTechLevel(Tower n, Tech t);
+	void setTechLevel(Tower n,std::string str);
 	void updateXML();
 };
 #endif // !__PLAYER_H__

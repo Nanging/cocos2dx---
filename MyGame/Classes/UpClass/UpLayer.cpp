@@ -2,9 +2,9 @@
 #include "ArrayUpIcon.h"
 #include "MagicUpIcon.h"
 #include "BatteryUpIcon.h"
-
-
-
+#include "MainMap.h"
+#include "TransitionGame.h"
+#include "Player.h"
 UpLayer::UpLayer()
 {
 }
@@ -13,34 +13,36 @@ UpLayer::~UpLayer()
 {
 }
 
+Scene* UpLayer::createScene()
+{
+	auto scene = Scene::create();
+	scene->setTag(TAG_SCENE);
+	auto layer = UpLayer::create();
+	scene->addChild(layer,0,TAG_UP);
+	return scene;
+}
 bool UpLayer::init(){
 	if (!Layer::init()) {
 		return false;
 	}
+	auto player = Player::getInstance();
 	choosestate = 0;
-	star = 99;
+	star = player->getScore();
 	temstar = star;
 
-	if (initSprite() && initLabel() && initMenu()){
-		auto listener = EventListenerMouse::create();  //×¢²áÊó±êÐüÍ£
-		return true;
-	}
-
-	else return false;
+	return initSprite() && initLabel() && initMenu();
 }
 bool UpLayer::initSprite() {
-	top = Sprite::create("top1.png");                            //ÕÚ¸Ç²ã
-	top->setPosition(760, 400);
-	top->setScale(0.5f);
-	bubble = Sprite::create("pao.png");
-	bubble->setScale(0.6f);
-	starPicture = Sprite::create("30.png");             //Ê£ÓàÐÇÐÇÊýÍ¼±ê
+	auto data = Sprite::create("top1.png");                            //ÕÚ¸Ç²ã
+	data->setPosition(760, 400);
+	data->setScale(0.5f);
+	auto starPicture = Sprite::create("30.png");             //Ê£ÓàÐÇÐÇÊýÍ¼±ê
 	starPicture->setScale(0.8f);
 	starPicture->setPosition(Point(820, 600));
 	starCost = Sprite::create("30.png");                //¼Û¸ñÍ¼±ê
 	starCost->setScale(0.5f);
 	starCost->setPosition(870, 520);
-	starBound = Sprite::create("57.png");                     //×°ÊÎ
+	auto starBound = Sprite::create("57.png");                     //×°ÊÎ
 	starBound->setPosition(850, 600);
 	starBound->setScale(0.5f);
 	introduceBound = Sprite::create("57.png");
@@ -53,13 +55,11 @@ bool UpLayer::initSprite() {
 	this->addChild(starPicture, 1);
 	this->addChild(starCost, 3);
 	this->addChild(starBound, 0);
-	this->addChild(top, 2);
+	this->addChild(data, 2);
 	this->addChild(slected, 1);
 	this->addChild(introduceBound, 0);
-	this->addChild(bubble, 4);
 
 	starCost->setVisible(false);
-	bubble->setVisible(false);
 	return true;
 }
 
@@ -67,34 +67,24 @@ bool UpLayer::initLabel() {
 	des= Label::createWithTTF("XXX", "fonts/Marker Felt.ttf", 23);       //ÓÒ±ß¿òÄÚµÄÎÄ×ÖÃèÊö
 	des->setAnchorPoint(Point(0, 1));
 	des->setDimensions(350,200);
-	briefDes= Label::createWithTTF("", "fonts/Marker Felt.ttf", 20);
-	upDes = Label::createWithTTF("UP", "fonts/Marker Felt.ttf", 20);
-	resetDes = Label::createWithTTF("RESET", "fonts/Marker Felt.ttf", 20);
-	quitDes = Label::createWithTTF("QUIT", "fonts/Marker Felt.ttf", 20);
 	starNumDes = Label::createWithBMFont("fonts/Number_1.fnt", String::createWithFormat("%d", star)->getCString());
 	starCostDes = Label::createWithTTF("", "fonts/Marker Felt.ttf", 15);
 	introduce = Label::createWithTTF("click the under icon to improve different kinds of towers' power ", "fonts/Marker Felt.ttf", 25);
 	introduce->setDimensions(180, 200);
 
 	des->setPosition(580, 500);
-	upDes->setPosition(700, 200);
-	resetDes->setPosition(840, 200);
-	quitDes->setPosition(770, 100);
 	starNumDes->setPosition(860, 600);
 	starCostDes->setPosition(890, 520);
 	introduce->setPosition(300, 500);
 
-	this->addChild(upDes, 2);
-	this->addChild(resetDes, 2);
-	this->addChild(quitDes, 2);
 	this->addChild(starNumDes, 1);
 	this->addChild(starCostDes, 3);
 	this->addChild(introduce, 0);
 	this->addChild(des, 1);
-	this->addChild(briefDes, 4);//Êó±êÐüÍ£ÎÄ×Ö
+	//this->addChild(briefDes, 4);//Êó±êÐüÍ£ÎÄ×Ö
 	
 	starCostDes->setVisible(false);
-	briefDes->setVisible(false);
+	//briefDes->setVisible(false);
 	return true;
 
 }
@@ -133,7 +123,7 @@ bool UpLayer::initMenu() {
 
 	upButton = MenuItemImage::create("69.png", "57.png", CC_CALLBACK_1(UpLayer::up, this));                                    //Éý¼¶°´Å¥
 	resetButton = MenuItemImage::create("69.png", "57.png", CC_CALLBACK_1(UpLayer::reset, this));                              //ÖØÖÃ°´Å¥
-	quitButton = MenuItemImage::create("69.png", "57.png", CC_CALLBACK_1(UpLayer::player, this));                              //ÍË³ö°´Å¥
+	quitButton = MenuItemImage::create("69.png", "57.png", CC_CALLBACK_1(UpLayer::quit, this));                              //ÍË³ö°´Å¥
 	upButton->setScale(0.5f);
 	resetButton->setScale(0.5f);
 	quitButton->setScale(0.5f);
@@ -211,11 +201,11 @@ void UpLayer::reset(Ref* pSender) {
 	des->setLocalZOrder(1);                  //Òþ²ØÓÒ±ß¿òÄÚµÄÎÄ×ÖÃèÊö
 	slected->setVisible(false);              //Òþ²ØÑ¡ÖÐÍ¼±êÊ±³öÏÖ°×¿òµÄÐ§¹û
 	choosestate = 0;                        
-	starNumDes->setString(String::createWithFormat("%d", temstar)->getCString());  
+	starNumDes->setString(__String::createWithFormat("%d", temstar)->getCString());  
 	starCostDes->setString("");
 	starCost->setVisible(false);             //¼Û¸ñÏÔÊ¾ÏûÊ§
 	upButton->setVisible(true);              //Éý¼¶°´Å¥¿É¼û
-	upDes->setVisible(true);
+	//upDes->setVisible(true);
 	array->reset();                          //Ö´ÐÐÏàÓ¦²Ëµ¥µÄÖØÖÃÐ§¹û
 	magic->reset();
 	battery->reset();
@@ -254,14 +244,14 @@ void UpLayer::showDes(int i) {
 	}
 	if (levelVector[choosestate-1]<=3) {   //Î´Âú¼¶ÔòÏÔÊ¾Éý¼¶°´Å¥
 		upButton->setVisible(true);
-		upDes->setVisible(true);
+		//upDes->setVisible(true);
 		starCost->setVisible(true);
 		starCostDes->setString(String::createWithFormat("%d", levelVector[choosestate - 1]+1)->getCString());
 		starCostDes->setVisible(true);
 	}
 	else {                       //ÒÑ¾­Âú¼¶ÔòÈÃ¼Û¸ñºÍÉý¼¶°´Å¥ÏûÊ§
 		upButton->setVisible(false);
-		upDes->setVisible(false);
+		//upDes->setVisible(false);
 		starCost->setVisible(false);
 		starCostDes->setVisible(false);
 	}
@@ -278,12 +268,15 @@ void UpLayer::swallow(int i) {     //Èç¹ûµã»÷ÆÁÄ»¿Õ°×²¿·Ö£¬ÔòÈÃ¿òÄÚÎÄ×ÖÏûÊ§£¬Ñ¡Ô
 }
 
 
-void UpLayer::player(Ref* pSender) {
+void UpLayer::quit(Ref* pSender) {
 	//×é³¤À´Ð´µÄº¯Êý
+	auto scene = MainMap::createScene();
+	Director::getInstance()->replaceScene(TransitionGame::create(1.5f, scene));
+	
 }
 void UpLayer::getLevel() {
 	//»ñÖªµ±Ç°Ã¿ÖÖÌì¸³µÄµÈ¼¶£¬·ÅÔÚÒ»¸öÊý×éÄÚ·½±ã¹ÜÀí
-	levelVector[0] = array->forceLevel;  levelVector[1] = array->scopeLevel;  levelVector[2] = array->speedLevel;
-	levelVector[3] = magic->forceLevel; levelVector[4] = magic->scopeLevel; levelVector[5] = magic->speedLevel;
-	levelVector[6] = battery->forceLevel; levelVector[7] = battery->scopeLevel; levelVector[8] = battery->speedLevel;
+	levelVector[0] = array->forceLevel;  levelVector[1] = array->speedLevel;  levelVector[2] = array->MaxLevel;
+	levelVector[3] = magic->forceLevel; levelVector[4] = magic->speedLevel; levelVector[5] = magic->MaxLevel;
+	levelVector[6] = battery->forceLevel; levelVector[7] = battery->speedLevel; levelVector[8] = battery->MaxLevel;
 }

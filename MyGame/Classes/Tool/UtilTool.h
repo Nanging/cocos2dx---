@@ -19,18 +19,20 @@ enum  NodeTag
 	TAG_GAME,//GameLayer
 	TAG_TEC,//TechLayer
 	TAG_STAGE,//CurrentStageLayer
+	TAG_UP,
 };
 enum Tower 
 {
 	/*kinds of Tower*/
-	NORMAL,
+	NORMAL = 1,
 	POWER,
 	SPEED,
-	MORE,
+	//MORE,
 };
 enum Tech
 {
-	UpPower,
+	NONE = -1,
+	UpForce,
 	UpSpeed,
 	UpMaxLevel,
 };

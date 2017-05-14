@@ -24,8 +24,8 @@ public:
 	static Game * createWithNum(int num);
 	void initUnbuild();
 	void initBackGround();
-	void pauseGame();
-	void resumeGame();
+	void pauseGame(Ref * psender);
+	void resumeGame(Ref * psender);
 	void Builded(Ref * psender);
 };
 

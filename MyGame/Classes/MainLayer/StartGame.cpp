@@ -22,7 +22,7 @@ bool StartGame::init()
 	}
 	//获得玩家
 	auto player = Player::getInstance();
-
+	//player->updateXML();
 
 	size = Director::getInstance()->getVisibleSize();
 	//添加背景图片
