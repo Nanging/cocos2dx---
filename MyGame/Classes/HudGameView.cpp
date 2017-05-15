@@ -45,7 +45,7 @@ void HudGameView::exitAsk() {
 
 	//添加时打标签并在pause函数中删除这两个层
 	this->addChild(menuExitAsk, 2, 3);
-	this->addChild(layerExitAsk, 1, 4);
+	this->addChild(layerExitAsk, 1, 4)；
 
 }
 
