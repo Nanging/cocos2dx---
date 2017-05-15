@@ -1,5 +1,5 @@
 #include"HudGameView.h"
-//#include"¹Ø¿¨.h"
+//#include"å…³å¡.h"
 USING_NS_CC;
 
 void HudGameView::voiceItem() {
@@ -31,7 +31,7 @@ void HudGameView::exitAsk() {
 	yesItem->setScale(1.5);
 	menuExitAsk->addChild(yesItem);
 
-	auto noItem = MenuItemImage::create("no_1.png", "no_2.png", CC_CALLBACK_0(HudGameView::pause, this));//´Ë´¦µ÷ÓÃpauseº¯ÊýÀ´·µ»ØÓÎÏ·²¢Çå³ýÕâ¼¸¸ölayer
+	auto noItem = MenuItemImage::create("no_1.png", "no_2.png", CC_CALLBACK_0(HudGameView::pause, this));//æ­¤å¤„è°ƒç”¨pauseå‡½æ•°æ¥è¿”å›žæ¸¸æˆå¹¶æ¸…é™¤è¿™å‡ ä¸ªlayer
 	noItem->setPosition(Point((Director::getInstance()->getVisibleSize()).width / 2 + 120, (Director::getInstance()->getVisibleSize()).height / 2 - 100));
 	noItem->setAnchorPoint(Point(0.5, 0.5));
 	noItem->setScale(1);
@@ -43,7 +43,7 @@ void HudGameView::exitAsk() {
 	labelAsk->setPosition(Point((Director::getInstance()->getVisibleSize()).width / 2 , (Director::getInstance()->getVisibleSize()).height / 2+50 ));
 	layerExitAsk->addChild(labelAsk);
 
-	//Ìí¼ÓÊ±´ò±êÇ©²¢ÔÚpauseº¯ÊýÖÐÉ¾³ýÕâÁ½¸ö²ã
+	//æ·»åŠ æ—¶æ‰“æ ‡ç­¾å¹¶åœ¨pauseå‡½æ•°ä¸­åˆ é™¤è¿™ä¸¤ä¸ªå±‚
 	this->addChild(menuExitAsk, 2, 3);
 	this->addChild(layerExitAsk, 1, 4);
 
@@ -67,7 +67,7 @@ void HudGameView::pause() {
 		backItem->setScale(1.5);
 		menuPause->addChild(backItem);
 
-		//±ê¼Ç2ÒÔ±ãÉ¾³ý
+		//æ ‡è®°2ä»¥ä¾¿åˆ é™¤
 		this->addChild(menuPause, 0, 2);
 }
 	else {
@@ -117,10 +117,10 @@ bool HudGameView::init() {
 		return false;
 	}
 	//init the hp, modify it if necessary
-	presentHealth = 10;//¼ÙÉèÉúÃüÖµÎª10£¨Ã¿¹Ø¶¼Ò»ÑùµÄ»°¾ÍÉè³É¶¨Öµ
+	presentHealth = 10;//å‡è®¾ç”Ÿå‘½å€¼ä¸º10ï¼ˆæ¯å…³éƒ½ä¸€æ ·çš„è¯å°±è®¾æˆå®šå€¼
 	presentMoney = 1000;
 	presentWave = 0;
-	int totalWave = 14;//********´Ë´¦ÐèÒªÒ»¸öº¯Êý»ñÈ¡¹Ø¿¨ÐÅÏ¢ÖÐµÄ²¨ÊýÐÅÏ¢£¬Ç°ÃæµÄhp¡¢½ðÇ®Ò²¿ÉÒÔÍ¨¹ýÕâÖÖ·½Ê½³õÊ¼»¯
+	int totalWave = 14;//********æ­¤å¤„éœ€è¦ä¸€ä¸ªå‡½æ•°èŽ·å–å…³å¡ä¿¡æ¯ä¸­çš„æ³¢æ•°ä¿¡æ¯ï¼Œå‰é¢çš„hpã€é‡‘é’±ä¹Ÿå¯ä»¥é€šè¿‡è¿™ç§æ–¹å¼åˆå§‹åŒ–
 
 
 	//init 3 layer to deposit sprites
@@ -135,13 +135,6 @@ bool HudGameView::init() {
 	//init size
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Point origin = Director::getInstance()->getVisibleOrigin();
-
-	//demo only
-	/*auto sprite_background = Sprite::create("map.png");
-	sprite_background->setPosition(Point(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
-	sprite_background->setScale(2.1);
-	layerBackground->addChild(sprite_background);*/
-	///////////////////////
 
 	//kuangkuang
 	auto spriteBottomframe = Sprite::create("FrameBottom.png");
@@ -198,10 +191,3 @@ bool HudGameView::init() {
 	return true;
 
 }
-
-/*Scene* HudGameView::createScene() {
-	auto scene = Scene::create();
-	auto layer = HudGameView::create();
-	scene->addChild(layer);
-	return scene;
-}//demo only*/
