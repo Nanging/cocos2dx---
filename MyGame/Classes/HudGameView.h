@@ -6,13 +6,10 @@
 class HudGameView : public cocos2d::Layer
 {
 public:
-	//static cocos2d::Scene* createScene();//demo only
-
 	virtual bool init();
 
-
 	void backToMenu();
-	void exitAsk();//back的回调函数，弹出询问是否确认退出，调用backToMenu
+	void exitAsk();//back鐨勫洖璋冨嚱鏁帮紝寮瑰嚭璇㈤棶鏄惁纭閫�鍑猴紝璋冪敤backToMenu
 	void voiceItem();
 	void pause();
 
@@ -24,7 +21,6 @@ public:
 	void healthMinus();//when an enemy pass
 	int getWave();//return present wave
 	void wavePlus();//
-
 
 	int presentMoney;
 	int presentWave;
