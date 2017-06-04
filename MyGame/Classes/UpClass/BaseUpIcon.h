@@ -19,6 +19,7 @@ public:
 	virtual void reset(){}
 	void getLevel(Tower n);
 	void setLevel(Tower n);
+	void initIcon();
 
 	Label* des;           //ÎÄ×ÖÃèÊö
 	MenuItemImage* forceIcon;    //Éı¼¶Í¼±ê

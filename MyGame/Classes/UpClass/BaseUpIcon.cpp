@@ -61,3 +61,18 @@ void BaseUpIcon::getLevel(Tower n)
 	speedLevel = player->getTechLevel(n, UpSpeed);
 	MaxLevel = player->getTechLevel(n, UpMaxLevel);
 }
+
+void BaseUpIcon::initIcon() {
+	if (this->forceLevel != 0) {
+		forceIcon->setNormalImage(Sprite::create("forceUp.png"));
+		forceIcon->setSelectedImage(Sprite::create("forceUp.png"));
+	}
+	if (this->speedLevel != 0) {
+		scopeIcon->setNormalImage(Sprite::create("scopeUp.png"));
+		scopeIcon->setSelectedImage(Sprite::create("scopeUp.png"));
+	}
+	if (this->speedLevel != 0) {
+		speedIcon->setNormalImage(Sprite::create("speedUp.png"));
+		speedIcon->setSelectedImage(Sprite::create("speedUp.png"));
+	}
+}

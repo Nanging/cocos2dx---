@@ -16,6 +16,7 @@ bool BatteryUpIcon::init() {//根据选中的图标设置文字描述
 		return false;
 	}
 	getLevel(POWER);
+	initIcon();
 	kindSprite = Sprite::create("kind3.png");
 	kindSprite->setScale(0.9f);
 	kindSprite->setPosition(0, 0);

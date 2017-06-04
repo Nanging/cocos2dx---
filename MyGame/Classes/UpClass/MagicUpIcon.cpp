@@ -16,6 +16,7 @@ bool MagicUpIcon::init() {
 		return false;
 	}
 	getLevel(NORMAL);
+	initIcon();
 	kindSprite = Sprite::create("kind2.png");
 	kindSprite->setScale(0.9f);
 	kindSprite->setPosition(0, 0);

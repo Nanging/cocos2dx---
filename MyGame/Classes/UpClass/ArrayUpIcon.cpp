@@ -17,6 +17,7 @@ bool ArrayUpIcon::init() {
 		return false;
 	}
 	getLevel(SPEED);
+	initIcon();
 	kindSprite = Sprite::create("kind1.png");
 	kindSprite->setScale(0.9f);
 	kindSprite->setPosition(0, 0);
