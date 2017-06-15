@@ -2,9 +2,9 @@
 #define __UP_LAYER_H__
 #include"cocos2d.h"
 USING_NS_CC;
-class ArrayUpIcon;
+class ArrowUpIcon;
 class MagicUpIcon;
-class BatteryUpIcon;
+class CannonUpIcon;
 
 
 
@@ -33,9 +33,9 @@ public:
 	void swallow(int i);                           
 	void getLevel();
 
-	ArrayUpIcon* array;                   //箭塔升级图
+	ArrowUpIcon* array;                   //箭塔升级图
 	MagicUpIcon* magic;                   //魔法塔升级图
-	BatteryUpIcon* battery;               //炮塔升级图
+	CannonUpIcon* battery;               //炮塔升级图
 	MenuItemImage* upButton;                  //升级按钮
 	MenuItemImage* resetButton;               //重置按钮
 	MenuItemImage* quitButton;
@@ -57,6 +57,7 @@ public:
 	Label* starNumDes;                       //剩余星星
 	Label* starCostDes;                      //价格
 	Label* introduce;                        //界面简单介绍
+	Label* tips;
 	//Label* briefDes;                        //鼠标悬停介绍
 
 	//Sprite* data;                              //遮盖层

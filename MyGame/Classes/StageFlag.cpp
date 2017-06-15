@@ -5,13 +5,11 @@
 #include "Game.h"
 StageFlag::StageFlag()
 {
-	log("---Flag-Up---");
 }
 
 
 StageFlag::~StageFlag()
 {
-	log("---Flag-Down---");
 }
 StageFlag* StageFlag::create(int num)
 {
@@ -32,17 +30,15 @@ bool StageFlag::init(int num)
 		return false;
 	}
 	stage = num;
-	flag = MenuItemImage::create("flag.png", "flag_seleted.png",CC_CALLBACK_1(StageFlag::startStage,this));
+	flag = MenuItemImage::create("png/flag.png", "png/flag_seleted.png",CC_CALLBACK_1(StageFlag::startStage,this));
 	auto botton = Menu::createWithItem(flag);
 	botton->setPosition(Vec2(0,0));
-	//auto move = MoveBy::create(1,Vec2(200, 0));
-	//auto re = RepeatForever::create(Sequence::create(move, move->reverse(), NULL));	flag->runAction(re);
 	this->addChild(botton, 1);
 
 	Size s = flag->getContentSize();
 	for (int i = 0; i < MaxScore; i++)
 	{
-		auto star = Sprite::create("missed_star.png");
+		auto star = Sprite::create("png/missed_star.png");
 		starSize = star->getContentSize();
 		this->addChild(star, 3, i + 1);
 		int k = i - 2;
@@ -62,25 +58,24 @@ void StageFlag::initStars()
 	int save = player->currentSave;
 	int current = player->getStage();
 	int score = player->getScore(save, stage);
-	log("---Flag---%d---cur--%d--", score,current);
 	if (score == MaxScore)
 	{
-		auto acNor = Sprite::create("pass_flag_normal.png");
-		auto acSel = Sprite::create("pass_flag_selected.png");
+		auto acNor = Sprite::create("png/pass_flag_normal.png");
+		auto acSel = Sprite::create("png/pass_flag_selected.png");
 		flag->setNormalImage(acNor);
 		flag->setSelectedImage(acSel);
 	}
 	else if (score >= 0 && stage != current+1)
 	{
-		auto acNor = Sprite::create("fail_flag_normal.png");
-		auto acSel = Sprite::create("fail_flag_seleted.png");
+		auto acNor = Sprite::create("png/fail_flag_normal.png");
+		auto acSel = Sprite::create("png/fail_flag_seleted.png");
 		flag->setNormalImage(acNor);
 		flag->setSelectedImage(acSel);
 	}
 	Size s = flag->getContentSize();
 	for (int i = 0; i < score; i++)
 	{
-		auto starGain = Sprite::create("gained_star.png");
+		auto starGain = Sprite::create("png/gained_star.png");
 		starGain->setScale(1.2f);
 		this->removeChildByTag(i + 1);
 		stars.replace(i, starGain);
@@ -95,9 +90,6 @@ void StageFlag::initStars()
 }
 void StageFlag::startStage(Ref* psender)
 {
-	log("---stage-%d---",stage);
-	//auto flag = dynamic_cast<Node*>(psender);
-	//flag->setVisible(false);
 	auto scene = Game::createScene(stage);
 	Director::getInstance()->replaceScene(TransitionGame::create(1.5, scene));
 }

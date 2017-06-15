@@ -9,11 +9,11 @@ using namespace cocos2d;
 static const int  TotalScore = 15;
 static const int  MaxScore = 5;
 static const int  StageNumber = 3;
-static const int  InitialLifes = 20;
-static const int  InitialMoney = 200;
+static const int  InitialLifes = 10;
+static const int  InitialMoney = 150;
 static const int  TowerNumber = 3;
 static const float scale = 1.1f;
-static const int TotalWave = 10;
+static const int TotalWave = 5;
 
 enum  NodeTag
 {
@@ -30,7 +30,7 @@ enum  NodeTag
 enum Tower 
 {
 	/*kinds of Tower*/
-	NORMAL = 1,
+	MAGIC = 1,
 	POWER,
 	SPEED,
 	//MORE,

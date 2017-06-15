@@ -37,17 +37,16 @@ bool Thug::init() {
 
 	animationmark = { 23,44,1,22,45,66,89,106 };
 	name = "desertThug";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_desert-hd.plist", "enemies_desert-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(800);
-	setCurHp(800);
+	setMaxHp(1000);
+	setCurHp(1000);
 	setHpBar();
-	setArmor(45);
-	setSpeed(65);
-	setMoney(80);
+	setArmor(20);
+	setSpeed(50);
+	setMoney(15);
 	this->addChild(baseSprite);
 
 	return true;

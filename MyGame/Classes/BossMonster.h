@@ -12,7 +12,9 @@ public:
 	~BossMonster();
 	CREATE_FUNC(BossMonster);
 	virtual bool init();
-	virtual void move();
+	void tick(float delta);
+	void update(float delta);
+	/*virtual void move();*/
 };
 
 

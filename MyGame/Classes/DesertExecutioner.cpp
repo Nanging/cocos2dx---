@@ -37,17 +37,16 @@ bool DesertExecutioner::init() {
 
 	animationmark = { 49,72,1,24,25,48,99,118 };
 	name = "desertExecutioner";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_desert_3-hd.plist", "enemies_desert_3-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(1000);
-	setCurHp(1000);
+	setMaxHp(3000);
+	setCurHp(3000);
 	setHpBar();
-	setArmor(30);
-	setSpeed(25);
-	setMoney(100);
+	setArmor(100);
+	setSpeed(40);
+	setMoney(40);
 	this->addChild(baseSprite);
 
 	return true;

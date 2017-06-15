@@ -23,19 +23,19 @@ bool BaseUpIcon::init() {
 	des->setString("OK");
 	briefDes = Label::createWithTTF("", "fonts/Marker Felt.ttf", 20);
 	briefDes->setVisible(false);
-	bubble = Sprite::create("pao_brown.png");
+	bubble = Sprite::create("png/pao_brown.png");
 	bubble->setScale(0.6f);
 	bubble->setVisible(false);
 	this->addChild(briefDes,9);
 	this->addChild(bubble,5);
-	auto circle = Sprite::create("circle.png");
+	auto circle = Sprite::create("png/circle.png");
 	this->addChild(circle,0);
 	circle->setPosition(Vec2(0, 0));
 	circle->setScale(0.8f);
 
-	forceIcon = MenuItemImage::create("unUpForce.png", "unUpForce.png");
-	speedIcon = MenuItemImage::create("unUpScope.png", "unUpScope.png");
-	levelIcon = MenuItemImage::create("unUpSpeed.png", "unUpSpeed.png");
+	forceIcon = MenuItemImage::create("png/unUpForce.png", "png/unUpForce.png");
+	speedIcon = MenuItemImage::create("png/unUpScope.png", "png/unUpScope.png");
+	levelIcon = MenuItemImage::create("png/unUpSpeed.png", "png/unUpSpeed.png");
 	forceIcon->setScale(0.8f);
 	speedIcon->setScale(0.8f);
 	levelIcon->setScale(0.8f);

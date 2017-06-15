@@ -19,6 +19,10 @@ public:
 	void reset();
 	void mouseTip(EventMouse* e);
 	void initIcon();
+	int effect[2][5]={                             //a[0][i]表示力量天赋在i级时的效果，a[1][i]表示速度天赋在i级时的效果 
+	             {0,10,30,60,100}
+	             ,{0,10,30,60,100}
+				 };
 };
 #endif //!__MAGIC_UP_ICON_H__
 

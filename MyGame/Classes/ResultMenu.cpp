@@ -12,6 +12,7 @@ ResultMenu::ResultMenu()
 
 ResultMenu::~ResultMenu()
 {
+
 }
 Scene *ResultMenu::createScene()
 {
@@ -27,15 +28,31 @@ bool ResultMenu::init()
 	{
 		return false;
 	}
-	score = 4;
+	score = 0;
 	status = true;
 	auto player = Player::getInstance();
+	int stage = player->current.currentStage;
+	int totalmoney = player->current.totalMoney;
+	int leftmoney = player->current.money;
+	int life = player->current.life;
+	player->current.score = totalmoney - InitialMoney * stage + leftmoney * 2;
+	if (player->current.score > stage * 250)
+	{
+		score+=2;
+	}
+	if (life > 0)
+	{
+		score += 2;
+		if (life > 9)
+		{
+			score++;
+		}
+	}
 	SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
-	log("-%d-%d-%d-", player->saveStatus[1], player->saveStatus[2], player->saveStatus[3]);
-	//if (player->current.life <= 0)
-	//{
-	//	status = false;
-	//}
+	if (life <= 0)
+	{
+		status = false;
+	}
 	updateResult();
 	initBack();
 	scheduleOnce(schedule_selector(ResultMenu::effect),1.0f);
@@ -46,20 +63,30 @@ void ResultMenu::initBack()
 	Size size = UtilTool::getSize();
 	if (status)
 	{
-		auto paper = Sprite::create("paper.png");
+		auto player = Player::getInstance();
+		if (player->getScore() < score)
+		{
+			player->setScore(player->currentSave, player->current.currentStage, score);
+		}
+		if (player->getStage() + 1 == player->current.currentStage)
+		{
+			player->setStage(player->currentSave, player->current.currentStage);
+		}
+
+		player->updateXML();
+		auto paper = Sprite::create("png/paper.png");
 		paper->setPosition(Vec2(size.width * 2 / 3, size.height / 2));
 		paper->setScale(0.5f,0.8f);
 		this->addChild(paper, 1);
-		restartButton = MenuItemImage::create("stage_restart.png", "stage_restart.png", CC_CALLBACK_1(ResultMenu::restart, this));
+		restartButton = MenuItemImage::create("png/stage_restart.png", "png/stage_restart.png", CC_CALLBACK_1(ResultMenu::restart, this));
 		restartButton->setScale(0.5f);
-		exitButton = MenuItemImage::create("stage_next.png", "stage_next.png", CC_CALLBACK_1(ResultMenu::quit, this));
+		exitButton = MenuItemImage::create("png/stage_next.png", "png/stage_next.png", CC_CALLBACK_1(ResultMenu::quit, this));
 		exitButton->setScale(0.4f);
-		background = Sprite::create("pass.png");
+		background = Sprite::create("png/pass.png");
 		
-		auto star = Sprite::create("star.png");
-		//star->setSpriteFrame("");
-		auto money = Sprite::create("money.png");
-		auto life = Sprite::create("life.png");
+		auto star = Sprite::create("png/star.png");
+		auto money = Sprite::create("png/money.png");
+		auto life = Sprite::create("png/life.png");
 		this->addChild(star, 2);
 		this->addChild(money, 2);
 		this->addChild(life, 2);
@@ -68,13 +95,11 @@ void ResultMenu::initBack()
 		star->setScale(1.2f);
 		star->setPosition(Vec2(size.width * 3 / 5, size.height * 2 / 3 - 2.7 * life->getContentSize().height));
 
-		
-		auto player = Player::getInstance();
-		auto lifeNumber = Label::createWithBMFont("Number_1.fnt", __String::createWithFormat("%d", player->current.life)->getCString());
+		auto lifeNumber = Label::createWithBMFont("fonts/Number_1.fnt", __String::createWithFormat("%d", player->current.life)->getCString());
 		this->addChild(lifeNumber, 2);
 		lifeNumber->setPosition(Vec2(size.width * 3 / 4, size.height * 2 / 3));
 
-		auto moneyNumber = Label::createWithBMFont("Number_1.fnt", __String::createWithFormat("%d", player->current.totalMoney)->getCString());
+		auto moneyNumber = Label::createWithBMFont("fonts/Number_1.fnt", __String::createWithFormat("%d", player->current.money)->getCString());
 		this->addChild(moneyNumber, 2);
 		moneyNumber->setPosition(Vec2(size.width * 3 / 4, size.height * 2 / 3 - life->getContentSize().height));
 
@@ -82,25 +107,28 @@ void ResultMenu::initBack()
 		scoreLabel->setPosition(Vec2(size.width * 2 / 3, size.height * 3 / 7));
 		this->addChild(scoreLabel, 2);
 		scoreLabel->setTextColor(Color4B::ORANGE);
-
+		
+		auto starLabel = Label::createWithBMFont("fonts/Number_1.fnt", __String::createWithFormat("%d", score)->getCString());
+		starLabel->setPosition(Vec2(size.width * 3 / 4, size.height * 2 / 3 - 2.7 * life->getContentSize().height));
+		this->addChild(starLabel,2);
 		if (score == FullScore)
 		{
-			result = Sprite::create("prefect_victory.png");
+			result = Sprite::create("png/prefect_victory.png");
 			result->setScale(0.9f);
 		}
 		else
 		{
-			result = Sprite::create("victory.png");
+			result = Sprite::create("png/victory.png");
 		}
 		result->setPosition(Vec2(size.width/3,size.height/2));
 		this->addChild(result, 1);
 	}
 	else
 	{
-		background = Sprite::create("fail.png");
-		restartButton = MenuItemImage::create("stage_try_again.png", "stage_try_again.png", CC_CALLBACK_1(ResultMenu::restart, this));	
+		background = Sprite::create("png/fail.png");
+		restartButton = MenuItemImage::create("png/stage_try_again.png", "png/stage_try_again.png", CC_CALLBACK_1(ResultMenu::restart, this));	
 		restartButton->setScale(0.4f);
-		exitButton = MenuItemImage::create("stage_quit.png", "stage_quit.png", CC_CALLBACK_1(ResultMenu::quit, this));
+		exitButton = MenuItemImage::create("png/stage_quit.png", "png/stage_quit.png", CC_CALLBACK_1(ResultMenu::quit, this));
 		exitButton->setScale(0.5f);
 	}
 	restartButton->setPosition(Vec2(size.width / 3, size.height/17));
@@ -114,14 +142,14 @@ void ResultMenu::initBack()
 }
 void ResultMenu::restart(Ref * psender)
 {
-	log("restart");
 	auto player = Player::getInstance();
 	auto scene = Game::createScene(player->current.currentStage);
 	Director::getInstance()->replaceScene(TransitionGame::create(1.5f, scene));
 }
 void ResultMenu::quit(Ref * psender)
 {
-	log("quit");
+	auto player = Player::getInstance();
+	player->updateXML();
 	auto scene = MainMap::createScene();
 	Director::getInstance()->replaceScene(TransitionGame::create(1.5f, scene));
 }
@@ -136,21 +164,14 @@ void ResultMenu::updateResult()
 		{
 			player->setScore(saveNumber, player->current.currentStage, score);
 		}
-		//player->updateXML();
+		player->updateXML();
 	}
 }
 void ResultMenu::effect(float dt)
 {
 	if (status)
 	{
-		SimpleAudioEngine::getInstance()->playEffect("Sound_VictoryCheer.wav");
-		//int i = 0;
-		//while (i<score)
-		//{
-		//	SimpleAudioEngine::getInstance()->playEffect("Sound_WinStars.wav");
-		//	i++;
-		//}
-		
+		SimpleAudioEngine::getInstance()->playEffect("wav/Sound_VictoryCheer.wav");	
 	}
 	
 }

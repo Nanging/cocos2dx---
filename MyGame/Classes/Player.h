@@ -76,7 +76,6 @@ struct SaveSlot
 			{
 				this->score[i] = str.at(i - 1) - '0';
 			}
-			log("%d--%d--%d", str.at(0), str.at(1), str.at(2));
 		}
 
 	}
@@ -100,6 +99,7 @@ private:
 	CC_SYNTHESIZE(bool, Started, Started);//status of game	
 public:
 	bool saveStatus[3];
+	int memberforspace;
 	Player();
 	~Player();
 	int currentSave;//current saveslot number
@@ -115,8 +115,8 @@ public:
 	int getStage(int num = 0);
 	void resetGame();//reset all saveslot
 	void start();//start game
-	void upTechLevel(Tower n, Tech t);//update tech data of this saveslot
-	void resetTech();//reset tech data of this saveslot
+	//void upTechLevel(Tower n, Tech t);//update tech data of this saveslot
+	//void resetTech();//reset tech data of this saveslot
 	int getTechLevel(Tower n, Tech t);
 	void setTechLevel(Tower n,std::string str);
 	void updateXML();

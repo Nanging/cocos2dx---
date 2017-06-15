@@ -1,10 +1,11 @@
 #include "UpLayer.h"
-#include "ArrayUpIcon.h"
+#include "ArrowUpIcon.h"
 #include "MagicUpIcon.h"
-#include "BatteryUpIcon.h"
+#include "CannonUpIcon.h"
 #include "MainMap.h"
-#include "TransitionGame.h"
 #include "Player.h"
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 UpLayer::UpLayer()
 {
 }
@@ -46,7 +47,6 @@ void UpLayer::update(float delta)
 	upButton->setEnabled(true);
 	if (choosestate == 0)
 	{
-		//upButton->setEnabled(false);
 		return;
 	}
 	int temprice = price[choosestate - 1][levelVector[choosestate - 1]];
@@ -58,22 +58,22 @@ void UpLayer::update(float delta)
 }
 bool UpLayer::initSprite() {
 	Size winSize = Director::getInstance()->getVisibleSize();
-	auto data = Sprite::create("introduce.png");                            //ÕÚ¸Ç²ã
+	auto data = Sprite::create("png/introduce.png");                            //ÕÚ¸Ç²ã
 	data->setPosition(winSize.width*0.77, winSize.height*0.55);
 	data->setScale(0.5f,0.6f);
-	auto starPicture = Sprite::create("star_count.png");             //Ê£ÓàÐÇÐÇÊýÍ¼±ê
+	auto starPicture = Sprite::create("png/star_count.png");             //Ê£ÓàÐÇÐÇÊýÍ¼±ê
 	starPicture->setScale(0.8f);
 	starPicture->setPosition(winSize.width*0.72,winSize.height*0.85);
-	starCost = Sprite::create("star_count.png");                //¼Û¸ñÍ¼±ê
+	starCost = Sprite::create("png/star_count.png");                //¼Û¸ñÍ¼±ê
 	starCost->setScale(0.5f);
 	starCost->setPosition(winSize.width*0.85, winSize.height*0.69);
-	auto starBound = Sprite::create("star_count_bound.png");                     //×°ÊÎ
+	auto starBound = Sprite::create("png/star_count_bound.png");                     //×°ÊÎ
 	starBound->setPosition(winSize.width*0.77, winSize.height*0.85);
 	starBound->setScale(0.7f);
-	introduceBound = Sprite::create("notice.png");
+	introduceBound = Sprite::create("png/notice.png");
 	introduceBound->setPosition(winSize.width*0.28, winSize.height*0.90);
 	introduceBound->setScale(0.5f,0.2f);
-	slected = Sprite::create("slected.png");                     //Ñ¡Ôñ±ß¿ò
+	slected = Sprite::create("png/slected.png");                     //Ñ¡Ôñ±ß¿ò
 	slected->setScale(0.75f);
 	slected->setVisible(false);
 
@@ -97,22 +97,23 @@ bool UpLayer::initLabel() {
 	starNumDes = Label::createWithBMFont("fonts/Number_1.fnt", String::createWithFormat("%d", star)->getCString());
 	starCostDes = Label::createWithTTF("", "fonts/Marker Felt.ttf", 20);
 	introduce = Label::createWithTTF("click these icon to improve different kinds of towers' power ", "fonts/Marker Felt.ttf", 25);
+	tips=Label::createWithTTF("", "fonts/Marker Felt.ttf", 30);
 	introduce->setDimensions(400, 200);
 
-	des->setPosition(winSize.width*0.62, winSize.height*0.71);
+	des->setPosition(winSize.width*0.62, winSize.height*0.68);
 	starNumDes->setPosition(winSize.width*0.82, winSize.height*0.85);
 	starCostDes->setPosition(winSize.width*0.88, winSize.height*0.69);
 	introduce->setPosition(winSize.width*0.30, winSize.height*0.77);
+	tips->setPosition(winSize.width*0.70, winSize.height*0.42);
 
 	this->addChild(starNumDes, 1);
 	this->addChild(starCostDes, 3);
 	this->addChild(introduce, 0);
 	this->addChild(des, 1);
-	//this->addChild(briefDes, 4);//Êó±êÐüÍ£ÎÄ×Ö
+	this->addChild(tips, 4);
 	starCostDes->setTextColor(Color4B::BLACK);
 	des->setTextColor(Color4B::BLACK);
 	starCostDes->setVisible(false);
-	//briefDes->setVisible(false);
 
 	scheduleUpdate();
 	return true;
@@ -121,14 +122,14 @@ bool UpLayer::initLabel() {
 
 bool UpLayer::initMenu() {
 	Size winSize = Director::getInstance()->getVisibleSize();
-	bgSprite = MenuItemImage::create("tech_layer_bg.png", "tech_layer_bg.png", CC_CALLBACK_0(UpLayer::swallow, this, 0));     //´¥ÃþÊ§Ð§
+	bgSprite = MenuItemImage::create("png/tech_layer_bg.png", "png/tech_layer_bg.png", CC_CALLBACK_0(UpLayer::swallow, this, 0));     //´¥ÃþÊ§Ð§
 	bgSprite->setPosition(winSize.width*0.5,winSize.height*0.5);
     bgSprite->setScale(winSize.width/bgSprite->getContentSize().width,winSize.height/bgSprite->getContentSize().height); 
 	auto menuTest = Menu::create(bgSprite, NULL);
 	menuTest->setPosition(Vec2::ZERO);
 	this->addChild(menuTest, -1);
 
-	array = ArrayUpIcon::create();                                               //¼ýËþÉý¼¶²Ëµ¥
+	array = ArrowUpIcon::create();                                               //¼ýËþÉý¼¶²Ëµ¥
 	array->setPosition(winSize.width*0.29,winSize.height*0.55);
 	addChild(array,1);
 	array->forceIcon->setCallback(CC_CALLBACK_0(UpLayer::showDes, this, 1));
@@ -144,7 +145,7 @@ bool UpLayer::initMenu() {
 	magic->levelIcon->setCallback(CC_CALLBACK_0(UpLayer::showDes, this, 6));
 	iconVector.push_back(magic->forceIcon);  iconVector.push_back(magic->speedIcon);  iconVector.push_back(magic->levelIcon);
 
-	battery = BatteryUpIcon::create();                                       //ÅÚËþÉý¼¶²Ëµ¥
+	battery = CannonUpIcon::create();                                       //ÅÚËþÉý¼¶²Ëµ¥
 	battery->setPosition(winSize.width*0.44, winSize.height*0.25);
 	addChild(battery,2);
 	battery->forceIcon->setCallback(CC_CALLBACK_0(UpLayer::showDes, this, 7));
@@ -152,10 +153,9 @@ bool UpLayer::initMenu() {
 	battery->levelIcon->setCallback(CC_CALLBACK_0(UpLayer::showDes, this, 9));
 	iconVector.push_back(battery->forceIcon);  iconVector.push_back(battery->speedIcon);  iconVector.push_back(battery->levelIcon);
 
-	upButton = MenuItemImage::create("up_nor.png", "up_sel.png", "touch_false.png", CC_CALLBACK_1(UpLayer::up, this));
-		//("69.png", "57.png", CC_CALLBACK_1(UpLayer::up, this));                                    //Éý¼¶°´Å¥
-	resetButton = MenuItemImage::create("reset_nor.png", "reset_sel.png", "touch_false.png", CC_CALLBACK_1(UpLayer::reset, this));                              //ÖØÖÃ°´Å¥
-	quitButton = MenuItemImage::create("done_nor.png", "done_sel.png", CC_CALLBACK_1(UpLayer::quit, this));                              //ÍË³ö°´Å¥
+	upButton = MenuItemImage::create("png/up_nor.png", "png/up_sel.png", "png/touch_false.png", CC_CALLBACK_1(UpLayer::up, this));                                 //Éý¼¶°´Å¥
+	resetButton = MenuItemImage::create("png/reset_nor.png", "png/reset_sel.png", "png/touch_false.png", CC_CALLBACK_1(UpLayer::reset, this));                              //ÖØÖÃ°´Å¥
+	quitButton = MenuItemImage::create("png/done_nor.png", "png/done_sel.png", CC_CALLBACK_1(UpLayer::quit, this));                              //ÍË³ö°´Å¥
 	
 	upButton->setScale(0.7f);
 	resetButton->setScale(0.7f);
@@ -182,72 +182,64 @@ bool UpLayer::initMenu() {
 
 void UpLayer::up(Ref* pSender) {
 	getLevel();
-	
 	if (choosestate == 0) {
 		return;
 	}
 	int temprice = price[choosestate - 1][levelVector[choosestate - 1]];
 	if (star - temprice >= 0&&levelVector[choosestate-1]<4) {
+		SimpleAudioEngine::getInstance()->playEffect("wav/Sound_TowerUpgrade.wav");
 		star -= temprice;                          //Èô¹ûÐÇÐÇÊý¹»µÄ»°Ôò¿ÛÇ®½øÐÐÉý¼¶
 		switch (choosestate)                       //¸ù¾Ýchoostate½øÐÐÏàÓ¦µÄÉý¼¶
 		{
 		case 1: {
 			array->upForce();
-			showDes(1);
 		}break;
 
 		case 2: {
 			array->upScope();
-			showDes(2);
 		}break;
 
 		case 3: {
 			array->upSpeed();
-			showDes(3);
 		}break;
 
 		case 4: {
 			magic->upForce();
-			showDes(4);
 		}break;
 
 		case  5: {
 			magic->upScope();
-			showDes(5);
 		}break;
 
 		case  6: {
 			magic->upSpeed();
-			showDes(6);
 		}break;
 
 		case 7: {
 			battery->upForce();
-			showDes(7);
 		}break;
 
 		case 8: {
 			battery->upScope();
-			showDes(8);
 		}break;
 
 		case 9: {
 			battery->upSpeed();
-			showDes(9);
 		}break;
 
 		}
 	}
 	else {
-		//upButton->setEnabled(false);
 		showDes(10);       //Ç®²»¹»
 	}
+	showDes(choosestate);
 	starNumDes->setString(String::createWithFormat("%d", star)->getCString());     //¼ÆËãÊ£ÏÂµÄÐÇÐÇÊý*/
 	
 }
 
 
 void UpLayer::reset(Ref* pSender) {
+	SimpleAudioEngine::getInstance()->playEffect("wav/inapp_star.wav");
 	setStar(temstar);                         //ÖØÖÃÐÇÐÇÊý
 	des->setLocalZOrder(1);                  //Òþ²ØÓÒ±ß¿òÄÚµÄÎÄ×ÖÃèÊö
 	slected->setVisible(false);              //Òþ²ØÑ¡ÖÐÍ¼±êÊ±³öÏÖ°×¿òµÄÐ§¹û
@@ -269,9 +261,10 @@ void UpLayer::showDes(int i) {
 	choosestate = i;
 	//upButton->setEnabled(true);
 	slected->setVisible(true);
+	tips->setVisible(false);
 	if (choosestate == 10) {
-		des->setString("you can't afford it");   //Ç®²»¹»µÄÌáÊ¾
-		//upButton->setEnabled(false);
+		tips->setString("you can't afford it");   //Ç®²»¹»µÄÌáÊ¾
+		tips->setVisible(true);
 	}
 	else{
 	switch ((choosestate-1)/3)
@@ -321,6 +314,7 @@ void UpLayer::swallow(int i) {     //Èç¹ûµã»÷ÆÁÄ»¿Õ°×²¿·Ö£¬ÔòÈÃ¿òÄÚÎÄ×ÖÏûÊ§£¬Ñ¡Ô
 	slected->setVisible(false);
 	starCostDes->setVisible(false);
 	starCost->setVisible(false);
+	tips->setVisible(false);
 	des->setLocalZOrder(1);
 }
 
@@ -329,7 +323,9 @@ void UpLayer::quit(Ref* pSender) {
 	//×é³¤À´Ð´µÄº¯Êý
 	array->setLevel(SPEED);
 	battery->setLevel(POWER);
-	magic->setLevel(NORMAL);
+	magic->setLevel(MAGIC);
+	auto player = Player::getInstance();
+	player->updateXML();
 	auto scene = MainMap::createScene();
 	Director::getInstance()->replaceScene(TransitionGame::create(1.5f, scene));
 	

@@ -31,24 +31,13 @@
 Player * Player::_instance = nullptr;
 Player::Player()
 {
-	log("---Player-On---");
 }
 Player::~Player()
 {
-	log("---Player-Off---");
 }
 bool  Player::initPlayer()
 {
 	resetGame();
-	current.life = 0;
-	currentSave = 0;
-	setScore(1, 1, 4);
-	setScore(3, 1, 5);
-	setScore(3, 2, 3);
-	setStage(1, 1);
-	setStage(3, 2);
-	saveStatus[1] = true;
-	saveStatus[3] = true;
 	updateXML();
 	return true;
 }
@@ -84,7 +73,6 @@ void Player::startSaveSlot(int num)
 void Player::resetSaveSlot(int num)
 {
 	saveStatus[num] = false;
-	log("-%d-false---",num);
 	setScore(num);
 	setStage(num);
 }
@@ -168,6 +156,10 @@ int Player::getScore(int num /* = 0 */, int stage /* = 0 */)
 }
 void Player::setStage(int num, int stage /* = 0 */)
 {
+	if (stage > 3)
+	{
+		stage = 3;
+	}
 	if (num == 0)
 	{
 		if (currentSave == 0)
@@ -224,10 +216,7 @@ void Player::resetGame()
 		resetSaveSlot(2);
 		resetSaveSlot(3);
 	}
-	else
-	{
-		log("Exist");
-	}
+
 	initSaveSlot();
 	setStarted(false);
 	currentSave = 0;
@@ -236,7 +225,7 @@ void Player::resetGame()
 	current.score = 0;
 	current.totalMoney = InitialMoney;
 	current.currentStage = 0;
-	current.currentStage = 0;
+	current.currentWave = 0;
 }
 void Player::initSaveSlot()
 {
@@ -255,15 +244,12 @@ void Player::initSaveSlot()
 	data[2].tech[1].init(ub->getStringForKey(first_tech_two));
 	data[2].tech[2].init(ub->getStringForKey(second_tech_two));
 	data[2].tech[3].init(ub->getStringForKey(third_tech_two));
-
 	saveStatus[3] = ub->getBoolForKey(is_save_three);
 	data[3].initScore(ub->getStringForKey(star_save_three));
 	data[3].stage = ub->getIntegerForKey(stage_save_three);
 	data[3].tech[1].init(ub->getStringForKey(first_tech_three));
 	data[3].tech[2].init(ub->getStringForKey(second_tech_three));
 	data[3].tech[3].init(ub->getStringForKey(third_tech_three));
-
-	log("%d--%d--%d",getScore(1),getScore(2),getScore(3));
 }
 void Player::start()
 {
@@ -272,33 +258,7 @@ void Player::start()
 	current.score = 0;
 	current.totalMoney = InitialMoney;
 	current.currentStage = 0;
-	current.currentStage = 0;
-}
-void Player::upTechLevel(Tower n,Tech t)
-{
-	switch (t)
-	{
-	case UpForce:
-		data[currentSave].tech[n].force++;
-		break;
-	case UpSpeed:
-		data[currentSave].tech[n].speed++;
-		break;
-	case UpMaxLevel:
-		data[currentSave].tech[n].level++;
-		break;
-	default:
-		break;
-	}
-}
-void Player::resetTech()
-{
-	for (int i = 0; i < TowerNumber; i++)
-	{
-		data[currentSave].tech[i].level = 1;
-		data[currentSave].tech[i].force = 0;
-		data[currentSave].tech[i].speed = 0;
-	}
+	current.currentWave = 0;
 }
 int Player::getTechLevel(Tower n, Tech t)
 {
@@ -345,5 +305,4 @@ void Player::updateXML()
 	ub->setStringForKey(first_tech_three,data[3].tech[1].update());
 	ub->setStringForKey(second_tech_three,data[3].tech[2].update());
 	ub->setStringForKey(third_tech_three,data[3].tech[3].update());
-	log("---Update-To-Local---");
 }

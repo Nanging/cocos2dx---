@@ -37,17 +37,16 @@ bool WingRider::init() {
 
 	animationmark = { 15,28,1,14,29,42,57,67 };
 	name = "CanibalWingRider";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_jungle-hd.plist", "enemies_jungle-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(200);
-	setCurHp(200);
+	setMaxHp(2000);
+	setCurHp(2000);
 	setHpBar();
-	setArmor(0);
-	setSpeed(100);
-	setMoney(50);
+	setArmor(50);
+	setSpeed(80);
+	setMoney(40);
 	this->addChild(baseSprite);
 
 	return true;

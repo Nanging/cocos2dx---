@@ -37,17 +37,16 @@ bool Robber::init() {
 
 	animationmark = { 23,44,1,22,45,66,89,106 };
 	name = "desertRaider";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_desert-hd.plist", "enemies_desert-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(700);
-	setCurHp(700);
+	setMaxHp(2000);
+	setCurHp(2000);
 	setHpBar();
-	setArmor(30);
-	setSpeed(90);
-	setMoney(80);
+	setArmor(50);
+	setSpeed(50);
+	setMoney(20);
 	this->addChild(baseSprite);
 
 	return true;

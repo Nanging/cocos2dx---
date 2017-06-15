@@ -5,19 +5,12 @@
 using namespace CocosDenshion;
 StartGame::StartGame()
 {
-	log("---StartGame---");
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("savage_music_theme.wav", true);
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("wav/savage_music_theme.wav", true);
 }
 
 
 StartGame::~StartGame()
 {
-	log("---StartGame_Delete---");
-	//auto sound = SimpleAudioEngine::getInstance();
-	//if (sound->isBackgroundMusicPlaying())
-	//{
-	//	sound->stopBackgroundMusic(false);
-	//}
 }
 
 
@@ -30,20 +23,15 @@ bool StartGame::init()
 	
 	//获得玩家
 	auto player = Player::getInstance();
-	//player->updateXML();
-	log("-%d-%d-%d-", player->saveStatus[1], player->saveStatus[2], player->saveStatus[3]);
 	size = Director::getInstance()->getVisibleSize();
 	//添加背景图片
-	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("mainmenu_spritesheet_32_1-hd.plist");
-	//SpriteFrameCache::getInstance()->addSpriteFramesWithFile("frame.plist");
-	auto background = Sprite::create("mainmenu_bg.png");
+	auto background = Sprite::create("png/mainmenu_bg.png");
 	background->setScale(size.width / background->getContentSize().width, size.height / background->getContentSize().height);
 	background->setPosition(Vec2(size.width / 2, size.height / 2));
 	this->addChild(background, -1);
 	//添加logo
-	logo = Sprite::create("logo.png");
+	logo = Sprite::create("png/logo.png");
 	logo->setPosition(Vec2(size.width / 2, size.height - logo->getContentSize().height/2));
-	//logo->setScale(1.1f);
 	this->addChild(logo,10);
 	initStart();
 	return true;
@@ -56,8 +44,8 @@ void StartGame::initStart()
 	removeBotton(startBottomTwo);
 
 	//开始游戏键
-	startBottomOne = Sprite::create("start_botton_normal.png");
-	startBottomTwo = Sprite::create("start_botton_seleted.png");
+	startBottomOne = Sprite::create("png/start_botton_normal.png");
+	startBottomTwo = Sprite::create("png/start_botton_seleted.png");
 	auto moveby = MoveBy::create(0.5, Vec2(0, -2 * startBottomOne->getContentSize().height / 3));
 	startBottomOne->setPosition(Vec2(size.width / 2, size.height - logo->getContentSize().height / 2));
 	this->addChild(startBottomOne, 0);
@@ -67,12 +55,6 @@ void StartGame::initStart()
 	auto Startlistener = EventListenerTouchOneByOne::create();
 	Startlistener->onTouchBegan = [=](Touch *t, Event *e) {
 		Point p = t->getLocation();
-		//Rect r = Rect(370, 190, 220, 100);
-		//if (r.containsPoint(p)&&StartBottomOne->getNumberOfRunningActions()==0)
-		//{
-		//	StartBottomTwo->setPosition(StartBottomOne->getPosition());
-		//	return true;
-		//}
 		if (startBottomOne->getBoundingBox().containsPoint(p)&& startBottomOne->getNumberOfRunningActions()==0)
 		{
 			startBottomTwo->setPosition(startBottomOne->getPosition());
@@ -86,11 +68,7 @@ void StartGame::initStart()
 		auto removeby = MoveBy::create(0.5, Vec2(0, 1.5 * startBottomOne->getContentSize().height / 3));
 		startBottomOne->runAction(removeby->clone());
 		startBottomTwo->runAction(removeby->clone());
-	//	StartBottomOne->setVisible(false);
-	//	StartBottomTwo->setVisible(false);
 		_eventDispatcher->removeEventListener(Startlistener);
-		//this->removeChild(StartBottomOne);
-		//this->removeChild(StartBottomTwo);
 		setSaveMenuVisible();
 		return false;
 	};
@@ -109,15 +87,12 @@ void StartGame::start(float dt)
 	auto player = Player::getInstance();
 	if (player->getStarted())
 	{
-		log("---Game-Start---");
 		unschedule(schedule_selector(StartGame::start));
-		//closeSaveMenu();
 	}
 }
 void StartGame::setSaveMenuVisible()
 {
 	auto player = Player::getInstance();
-	log("-%d-%d-%d-", player->saveStatus[1], player->saveStatus[2], player->saveStatus[3]);
 	for (int i = 0; i <= 4; i++)
 	{
 		auto child = this->getChildByTag(i);
@@ -127,7 +102,7 @@ void StartGame::setSaveMenuVisible()
 		}
 	}
 	//设置菜单背景
-	auto saceMenuBg = Sprite::create("mainmenu_saveslot_bg.png");
+	auto saceMenuBg = Sprite::create("png/mainmenu_saveslot_bg.png");
 	saceMenuBg->setPosition(Vec2(size.width / 2, size.height / 2 - 0.95 * logo->getContentSize().height / 3 - 500));
 	auto moveby = MoveBy::create(0.5,Vec2(0, 500));
 	this->addChild(saceMenuBg,1,0);
@@ -140,13 +115,12 @@ void StartGame::setSaveMenuVisible()
 		saveslot->runAction(moveby->clone());
 		this->addChild(saveslot, 10-i, i);
 	}
-	auto closeSaveslot = MenuItemImage::create("close_saveslot.png", "close_saveslot.png", CC_CALLBACK_0(StartGame::closeSaveMenu, this));
+	auto closeSaveslot = MenuItemImage::create("png/close_saveslot.png", "png/close_saveslot.png", CC_CALLBACK_0(StartGame::closeSaveMenu, this));
 	auto closeBotton = Menu::createWithItem(closeSaveslot);
 	closeBotton->setPosition(Vec2(size.width / 2, size.height / 2 - 1.7*saceMenuBg->getContentSize().height / 2  - 500));
 	this->addChild(closeBotton, 6, 4);
 	closeBotton->runAction(moveby->clone());
 	schedule(schedule_selector(StartGame::start));
-	log("-%d-%d-%d-", player->saveStatus[1], player->saveStatus[2], player->saveStatus[3]);
 }
 void StartGame::closeSaveMenu()
 {
@@ -165,8 +139,4 @@ void StartGame::removeBotton(Sprite * botton)
 		return;
 	}
 	this->removeChild(botton);
-	//if (botton->getNumberOfRunningActions()==0)
-	//{
-	//	this->removeChild(botton);
-	//}
 }

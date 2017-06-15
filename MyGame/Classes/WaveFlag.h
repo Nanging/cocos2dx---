@@ -15,7 +15,8 @@ public:
 	MenuItemImage* baseButton;  //´¥Åö°´Å¥
 	Sprite* bubble;
 	Label* des;
-	Sprite * nextEmeny;
+	//Sprite * nextEmeny;
+	bool isOver;
 	bool isFirstWave;
 	bool isRun;
 

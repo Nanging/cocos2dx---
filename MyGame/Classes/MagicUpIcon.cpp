@@ -15,9 +15,9 @@ bool MagicUpIcon::init() {
 	if (!BaseUpIcon::init()) {
 		return false;
 	}
-	getLevel(NORMAL);
+	getLevel(MAGIC);
 	initIcon();
-	kindSprite = Sprite::create("kind2.png");
+	kindSprite = Sprite::create("png/kind2.png");
 	kindSprite->setScale(0.9f);
 	kindSprite->setPosition(0, 0);
 	addChild(kindSprite);
@@ -34,29 +34,29 @@ void MagicUpIcon::setDes(int i) {   //根据点击的图标设置文字描述
 	case 1:
 		tem = forceLevel;
 		if (tem <= 3) {
-			des->setString(String::createWithFormat("force enhance :\n\nnow effect :%d cent improve\n\nnext level effect %d cent improve",
-				tem*(tem + 1) * 5, (tem + 1)*(tem + 2) * 5)->getCString());
+			des->setString(__String::createWithFormat("force enhance :\nnow effect :%d percent improve\nnext level effect: %d percent improve",
+				effect[0][forceLevel], effect[0][forceLevel+1])->getCString());
 		}
 		else {
-			des->setString("you have reached max level 100 cent improve in total");
+			des->setString("you have reached max level 100 percent improve in total");
 		}break;
 	case 2:
 		tem = speedLevel;
 		if (tem <= 3) {
-			des->setString(String::createWithFormat("scope enhance :\n\nnow effect :%d cent improve\n\nnext level effect %d cent improve",
-				tem*(tem + 1) * 5, (tem + 1)*(tem + 2) * 5)->getCString());
+			des->setString(__String::createWithFormat("speed enhance :\nnow effect :%d percent improve\nnext level effect: %d percent improve",
+				effect[1][speedLevel],effect[1][speedLevel+1])->getCString());
 		}
 		else {
-			des->setString("you have reached max level 100 cent improve in total");
+			des->setString("you have reached max level 100 percent improve in total");
 		}break;
 	case 3:
 		tem = MaxLevel;
 		if (tem <= 3) {
-			des->setString(String::createWithFormat("speed enhance :\n\nnow effect :%d cent improve\n\nnext level effect %d cent improve",
-				tem*(tem + 1) * 5, (tem + 1)*(tem + 2) * 5)->getCString());
+			des->setString(__String::createWithFormat("improve magic towers'\nmaxlevel by 1\nnow maxlevel: %d\nnext level effect:\nlet the maxlevel be %d",
+				MaxLevel,MaxLevel+1)->getCString());
 		}
 		else {
-			des->setString("you have reached max level 100 cent improve in total");
+			des->setString("now maxLevel:4");
 		}break;
 
 	}
@@ -65,31 +65,31 @@ void MagicUpIcon::setDes(int i) {   //根据点击的图标设置文字描述
 void MagicUpIcon::upForce() {
 	forceLevel++;
 	setDes(1);
-	forceIcon->setNormalImage(Sprite::create("forceUp.png"));
-	forceIcon->setSelectedImage(Sprite::create("forceUp.png"));
+	forceIcon->setNormalImage(Sprite::create("png/forceUp.png"));
+	forceIcon->setSelectedImage(Sprite::create("png/forceUp.png"));
 }
 
 void MagicUpIcon::upScope() {
 	speedLevel++;
 	setDes(2);
-	speedIcon->setNormalImage(Sprite::create("scopeUp.png"));
-	speedIcon->setSelectedImage(Sprite::create("scopeUp.png"));
+	speedIcon->setNormalImage(Sprite::create("png/scopeUp.png"));
+	speedIcon->setSelectedImage(Sprite::create("png/scopeUp.png"));
 }
 
 void MagicUpIcon::upSpeed() {
 	MaxLevel++;
 	setDes(3);
-	levelIcon->setNormalImage(Sprite::create("speedUp.png"));
-	levelIcon->setSelectedImage(Sprite::create("speedUp.png"));
+	levelIcon->setNormalImage(Sprite::create("png/speedUp.png"));
+	levelIcon->setSelectedImage(Sprite::create("png/speedUp.png"));
 }
 
 void MagicUpIcon::reset() {
-	forceIcon->setNormalImage(Sprite::create("unUpForce.png"));        //重置图片
-	forceIcon->setSelectedImage(Sprite::create("unUpForce.png"));
-	speedIcon->setNormalImage(Sprite::create("unUpScope.png"));
-	speedIcon->setSelectedImage(Sprite::create("unUpScope.png"));
-	levelIcon->setNormalImage(Sprite::create("unUpSpeed.png"));
-	levelIcon->setSelectedImage(Sprite::create("unUpSpeed.png"));
+	forceIcon->setNormalImage(Sprite::create("png/unUpForce.png"));        //重置图片
+	forceIcon->setSelectedImage(Sprite::create("png/unUpForce.png"));
+	speedIcon->setNormalImage(Sprite::create("png/unUpScope.png"));
+	speedIcon->setSelectedImage(Sprite::create("png/unUpScope.png"));
+	levelIcon->setNormalImage(Sprite::create("png/unUpSpeed.png"));
+	levelIcon->setSelectedImage(Sprite::create("png/unUpSpeed.png"));
 	forceLevel = 0;
 	speedLevel = 0;
 	MaxLevel = 1;
@@ -111,13 +111,13 @@ void MagicUpIcon::mouseTip(EventMouse* e) {
 		bubble->setPosition(temPoint);
 	}
 	else if (speedIcon->getBoundingBox().containsPoint(reNode)) {
-		briefDes->setString("improve magic\ntowers' scope");
+		briefDes->setString("improve magic\ntowers' speed");
 		auto temPoint = speedIcon->getPosition() + speedIcon->getContentSize();
 		briefDes->setPosition(temPoint);
 		bubble->setPosition(temPoint);
 	}
 	else if (levelIcon->getBoundingBox().containsPoint(reNode)) {
-		briefDes->setString("improve magic\ntowers' speed");
+		briefDes->setString("improve magic\ntowers' maxlevel");
 		auto temPoint = levelIcon->getPosition() + levelIcon->getContentSize();
 		briefDes->setPosition(temPoint);
 		bubble->setPosition(temPoint);
@@ -130,15 +130,15 @@ void MagicUpIcon::mouseTip(EventMouse* e) {
 }
 void MagicUpIcon::initIcon() {
 	if (this->forceLevel != 0) {
-		forceIcon->setNormalImage(Sprite::create("forceUp.png"));
-		forceIcon->setSelectedImage(Sprite::create("forceUp.png"));
+		forceIcon->setNormalImage(Sprite::create("png/forceUp.png"));
+		forceIcon->setSelectedImage(Sprite::create("png/forceUp.png"));
 	}
 	if (this->speedLevel != 0) {
-		speedIcon->setNormalImage(Sprite::create("scopeUp.png"));
-		speedIcon->setSelectedImage(Sprite::create("scopeUp.png"));
+		speedIcon->setNormalImage(Sprite::create("png/scopeUp.png"));
+		speedIcon->setSelectedImage(Sprite::create("png/scopeUp.png"));
 	}
 	if (this->MaxLevel != 1) {
-		levelIcon->setNormalImage(Sprite::create("speedUp.png"));
-		levelIcon->setSelectedImage(Sprite::create("speedUp.png"));
+		levelIcon->setNormalImage(Sprite::create("png/speedUp.png"));
+		levelIcon->setSelectedImage(Sprite::create("png/speedUp.png"));
 	}
 }

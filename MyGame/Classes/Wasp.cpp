@@ -37,17 +37,16 @@ bool Wasp::init() {
 
 	animationmark = { 15,29,1,14,30,42,43,53 };
 	name = "wasp_queen";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_desert-hd.plist", "enemies_desert-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(800);
-	setCurHp(800);
+	setMaxHp(2000);
+	setCurHp(2000);
 	setHpBar();
-	setArmor(45);
-	setSpeed(130);
-	setMoney(80);
+	setArmor(30);
+	setSpeed(50);
+	setMoney(25);
 	this->addChild(baseSprite);
 
 	return true;

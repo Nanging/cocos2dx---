@@ -1,5 +1,7 @@
 #include "BaseMonster.h"
-#include"Monster1.h"
+#include "Player.h"
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 USING_NS_CC;
 
 
@@ -24,7 +26,8 @@ bool BaseMonster::init() {
 	if (!Sprite::init()){
 		return false;
 	}
-	
+	alive = true;
+	isMoving = true;
 	return true;
 }
 
@@ -65,10 +68,9 @@ Point BaseMonster::curPoint() {
 Point BaseMonster::nextPoint() {
 	int tem = pointcnt;
 	if (pointcnt < pointsVector.size() - 1){            //没到终点
-		return pointsVector[tem+ 1];
+		return pointsVector[tem + 1];
 	}
-
-	else {                                            //已到终点
+	else {                  
 		return pointsVector[tem];
 	}
 }
@@ -93,7 +95,6 @@ Animation* BaseMonster::createMonsterAnimation(const char* str1,int start,int en
 
 void BaseMonster::stateUpdate(float dt) {
 
-	getHurt(10);
 	auto runUpAnimation = this->createMonsterAnimation(name, animationmark[0], animationmark[1]);             //由于没有runleft的资源，用runright后setFlippedX代替
 	auto runUpAction = Animate::create(runUpAnimation);
 	runUpAction->setTag(3);
@@ -108,7 +109,6 @@ void BaseMonster::stateUpdate(float dt) {
 
 
 	if (curPoint() == nextPoint()) {    //走到终点前此时curPoint=nextPoint设置方向时需要特别处理
-		log("end");
 		int tem = pointsVector.size();
 		auto temcurpoint = pointsVector[tem-2];
 		auto temnextpoint = pointsVector[tem-1];
@@ -126,7 +126,14 @@ void BaseMonster::stateUpdate(float dt) {
 		}
 		auto nowPosition = this->getPosition();             
 		if (nowPosition.getDistance(temnextpoint) < 5.0f) {          //死亡效果测试，正式加到游戏里后删去
-			getHurt(maxHp);
+			auto player = Player::getInstance();
+			if (isMoving &&player->current.life > 0)
+			{
+				SimpleAudioEngine::getInstance()->playEffect("wav/Sound_LooseLife.wav");
+				player->current.life--;
+				isMoving = false;
+			}
+			disappear();
 		}
 	}
 
@@ -140,23 +147,19 @@ void BaseMonster::stateUpdate(float dt) {
 	case walkRight: {
 		stopMonsterAction();
 		baseSprite->runAction(runRightAction);
-		log("walkright");
 	}  break;
 	case walkLeft: {
 		stopMonsterAction();
 		baseSprite->runAction(runRightAction);
 		baseSprite->setFlippedX(true);
-		log("walkleft");
 	}  break;
 	case walkUp: {
 		stopMonsterAction();
 		baseSprite->runAction(runUpAction);
-		log("walkup");
 	}  break;
 	case walkDown: {
 		stopMonsterAction();
 	    baseSprite->runAction(runDownAction);
-		log("walkdown");
 	}  break;
 
 	case death: {
@@ -169,7 +172,20 @@ void BaseMonster::stateUpdate(float dt) {
 	
 
 }
+void BaseMonster::isdead(float dt)
+{
+	if (curHp <= 0)
+	{
+		alive = false;
+	}
+	if (alive == false)
+	{
+		setState(death);
+		baseSprite->stopAllActions();
+		dead();
+	}
 
+}
 
 void BaseMonster::stopMonsterAction() {
 	baseSprite->stopActionByTag(2);
@@ -180,6 +196,10 @@ void BaseMonster::stopMonsterAction() {
 
 void BaseMonster::getHurt(int damage) {
 	 //收到攻击后通过计算将伤害传给damage
+	if (damage < 0)
+	{
+		return;
+	}
 	curHp -= damage;
 	float rate = float(float(curHp) / float(maxHp));
 	float percent = rate*100.0f;
@@ -187,11 +207,16 @@ void BaseMonster::getHurt(int damage) {
 	if (curHp <= 0) {  //如果hp<0则执行死亡函数
 		setCurHp(0);
 		setState(death);
+		baseSprite->stopAllActions();
+		dead();
 	}
 }
 
 
 void BaseMonster::dead() {
+	Player::getInstance()->current.money += money;
+	Player::getInstance()->current.totalMoney += money;
+	SimpleAudioEngine::getInstance()->playEffect("wav/inapp_cash.wav");
 	this->unschedule(schedule_selector(BaseMonster::stateUpdate));
 	this->stopAllActions();             //防止滑步
 	auto temcurpoint = curPoint();
@@ -214,15 +239,17 @@ void BaseMonster::dead() {
 
 
 void BaseMonster::disappear() {
+	isMoving = false;
+	this->removeFromParentAndCleanup(true);
 	this->setVisible(false);
 }
 
 void BaseMonster::setHpBar() {
-	hpbg = Sprite::create("hp_bg.png");
+	hpbg = Sprite::create("png/hp_bg.png");
 	hpbg->setScale(0.5f, 0.21f);
 	hpbg->setPosition(0, baseSprite->getContentSize().height / 2 + 20);
 	this->addChild(hpbg);
-	auto hpPicture = Sprite::create("hpbar.png");
+	auto hpPicture = Sprite::create("png/hpbar.png");
 	hpBar = ProgressTimer::create(hpPicture);
 	hpBar->setScale(0.5f, 0.25f);
 	hpBar->setType(ProgressTimer::Type::BAR);

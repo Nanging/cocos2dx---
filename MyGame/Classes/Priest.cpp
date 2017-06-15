@@ -37,17 +37,16 @@ bool Priest::init() {
 
 	animationmark = { 23,44,1,22,45,66,160,176 };
 	name = "CanibalShamanPriest";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_jungle-hd.plist", "enemies_jungle-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(400);
-	setCurHp(400);
+	setMaxHp(2000);
+	setCurHp(2000);
 	setHpBar();
-	setArmor(0);
-	setSpeed(80);
-	setMoney(50);
+	setArmor(100);
+	setSpeed(40);
+	setMoney(40);
 	this->addChild(baseSprite);
 
 	return true;

@@ -40,17 +40,16 @@ bool Shield::init() {
 
 	animationmark = { 23,44,1,22,45,66,100,118 };
 	name = "CanibalShamanShield";
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("enemies_jungle-hd.plist", "enemies_jungle-hd.png");
 	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(__String::createWithFormat("%s_0001.png", name)->getCString());
 	baseSprite = Sprite::createWithSpriteFrame(frame);
 	baseSprite->setAnchorPoint(Point(0.5f, 0.3f));
 	pointcnt = 0;
-	setMaxHp(400);
-	setCurHp(400);
+	setMaxHp(1500);
+	setCurHp(1500);
 	setHpBar();
-	setArmor(80);
-	setSpeed(40);
-	setMoney(50);
+	setArmor(50);
+	setSpeed(50);
+	setMoney(30);
 	this->addChild(baseSprite);
 
 	return true;
